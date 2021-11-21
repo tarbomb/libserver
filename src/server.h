@@ -11,7 +11,7 @@
  * clients.
 */
 struct LibServerServer {
-
-}
+    
+};
 
 #endif
