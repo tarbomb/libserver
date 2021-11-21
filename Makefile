@@ -6,7 +6,7 @@ TESTS=$(patsubst %.c,%.out,$(wildcard tests/*.c))
 
 .PHONY: tests
 
-build: out/server.o out/client.o
+build: out/server.o out/client.o $(TESTS)
 
 all: out/server.o out/client.o $(PREFIX)/libserver.so
 

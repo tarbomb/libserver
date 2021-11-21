@@ -16,7 +16,6 @@
  * clients.
 */
 struct LibServerServer {
-    int mutex_id;
     pthread_mutex_t *mutex;
     struct LibServerClientArray clients;
 };
@@ -30,5 +29,13 @@ struct LibServerServer {
  * @return: the new server
 */
 struct LibServerServer libserver_init(const char *mutex);
+
+/*
+ * Releases a server structure from memory.
+ *
+ * @param server: the server to release
+*/
+void libserver_free(struct LibServerServer server);
+
 
 #endif
