@@ -5,6 +5,7 @@
 #ifndef LIB_SERVER_H
 #define LIB_SERVER_H
 
+#include <pthread.h>
 #include "data-structures/client.h"
 
 #define LIB_SERVER_DEFAULT_CLIENT_LENGTH 5
@@ -16,6 +17,7 @@
 */
 struct LibServerServer {
     int mutex_id;
+    pthread_mutex_t *mutex;
     struct LibServerClientArray clients;
 };
 

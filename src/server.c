@@ -33,8 +33,5 @@ struct LibServerServer libserver_init(const char *mutex) {
     memory_key = ftok(mutex, 0);
     new_server.mutex_id = shmget(memory_key, sizeof(pthread_mutex_t), 0644 | IPC_CREAT);
 
-    printf("%i\n", new_server.mutex_id);
-
-
     return new_server;
 }
