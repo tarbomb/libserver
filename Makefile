@@ -4,6 +4,10 @@ HEADER_PREFIX = /usr/local/include
 CFLAGS=-ansi -Wall -Wextra -lpthread
 TESTS=$(patsubst %.c,%.out,$(wildcard tests/*.c))
 
+.PHONY: tests
+
+build: out/server.o out/client.o
+
 all: out/server.o out/client.o $(PREFIX)/libserver.so
 
 install: $(PREFIX)/libserver.so
@@ -20,8 +24,7 @@ out/client.o: src/data-structures/client.c src/data-structures/client.h
 tests/%.out: tests/%.c
 	$(CC) $< -o $@ out/server.o out/client.o
 
-.PHONY: tests
-tests: $(TESTS)
+tests: $(TESTS) out/server.o out/client.o
 	for test_file in tests/*.out; do \
 		 ./$$test_file;			 	 \
 	done

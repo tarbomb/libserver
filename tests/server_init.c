@@ -24,6 +24,9 @@ int main(void) {
     struct LibServerServer new_server = libserver_init("./file");
 
     assert(check_error("libserver_init: attempt to map shared mutex to NULL pointer\n", error_null_file) == 1);
+    assert(new_server.clients.contents != NULL);
+    assert(new_server.clients.logical_size == 0);
+    assert(new_server.clients.physical_size == LIB_SERVER_DEFAULT_CLIENT_LENGTH);
 
     return 0;
 }
