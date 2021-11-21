@@ -1,7 +1,7 @@
 CC=cc
 PREFIX=/usr/local/lib
 HEADER_PREFIX = /usr/local/include
-CFLAGS=-ansi -Wall -Wextra
+CFLAGS=-ansi -Wall -Wextra -lpthread
 
 all: out/server.o out/client.o $(PREFIX)/libserver.so
 

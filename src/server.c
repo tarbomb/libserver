@@ -9,6 +9,7 @@
 */
 
 #include <stdlib.h>
+#include <pthread.h>
 #include <sys/shm.h>
 #include <sys/mman.h>
 
@@ -16,10 +17,21 @@
 #include "data-structures/client.h"
 
 struct LibServerServer libserver_init(const char *mutex) {
+    key_t memory_key = 0;
     struct LibServerServer new_server = {0};
 
+    if(mutex == NULL) {
+        fprintf(stderr, "%s", "libserver_init: attempt to map shared mutex to NULL pointer\n");
+        exit(EXIT_FAILURE);
+    }
+
+    /* Initialize the client array */
     new_server.clients.contents = malloc(LIB_SERVER_DEFAULT_CLIENT_LENGTH * sizeof(struct LibServerClient));
     new_server.clients.physical_size = LIB_SERVER_DEFAULT_CLIENT_LENGTH;
+
+    /* Setup shared memory for a registration mutex */
+    memory_key = ftok(mutex, 0);
+
 
     return new_server;
 }
