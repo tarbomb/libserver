@@ -19,6 +19,7 @@
 struct LibServerServer libserver_init(const char *mutex) {
     key_t memory_key = 0;
     struct LibServerServer new_server = {0};
+    pthread_mutexattr_t attribute = {0};
 
     if(mutex == NULL) {
         fprintf(stderr, "%s", "libserver_init: attempt to map shared mutex to NULL pointer\n");
@@ -29,9 +30,13 @@ struct LibServerServer libserver_init(const char *mutex) {
     new_server.clients.contents = malloc(LIB_SERVER_DEFAULT_CLIENT_LENGTH * sizeof(struct LibServerClient));
     new_server.clients.physical_size = LIB_SERVER_DEFAULT_CLIENT_LENGTH;
 
-    /* Setup shared memory for a registration mutex */
+    /* Setup shared memory and new mutex */
     memory_key = ftok(mutex, 0);
     new_server.mutex_id = shmget(memory_key, sizeof(pthread_mutex_t), 0644 | IPC_CREAT);
+    new_server.mutex = shmat(new_server.mutex_id, NULL, 0);
+    pthread_mutexattr_init(&attribute);
+    pthread_mutexattr_setpshared(&attribute, PTHREAD_PROCESS_SHARED);
+    pthread_mutex_init(new_server.mutex, NULL);
 
     return new_server;
 }

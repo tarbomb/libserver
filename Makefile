@@ -22,7 +22,7 @@ out/client.o: src/data-structures/client.c src/data-structures/client.h
 	$(CC) -c src/data-structures/client.c -o out/client.o -fpic $(CFLAGS)
 
 tests/%.out: tests/%.c out/server.o out/client.o
-	$(CC) $< out/server.o out/client.o -o $@
+	$(CC) $< out/server.o out/client.o -o $@ $(CFLAGS)
 
 tests: $(TESTS)
 	for test_file in tests/*.out; do \
