@@ -12,23 +12,21 @@ struct LibServerClient {
 };
 
 /*
- * Release a client from memory.
- *
- * @param client: the client to release
-*/
-void libserver_client_free(struct LibServerClient client);
-
-/*
  * An array of clients for the server to manage.
 */
 ct_array_define_array(LibServerClientArray, struct LibServerClient);
 
 /*
- * Initialize a new client array on the heap.
- *
- * @parreturn: the new client array
+ * Initialize a new array of clients on the stack for the server to manage
 */
-struct LibServerClientArray *libserver_client_array_init();
+struct LibServerClientArray libserver_client_init(size_t size, struct LibServerClient block[]);
+
+/*
+ * Release a client from memory.
+ *
+ * @param client: the client to release
+*/
+void libserver_client_free(struct LibServerClient client);
 
 /*
  * Release a client array and its contents from memory.
