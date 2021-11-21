@@ -1,8 +1,9 @@
 CC=cc
 PREFIX=/usr/local/lib
 HEADER_PREFIX = /usr/local/include
-CFLAGS=-ansi -Wall -Wextra -lpthread
+CFLAGS=-ansi -Wall -Wextra -lpthread -g
 TESTS=$(patsubst %.c,%.out,$(wildcard tests/*.c))
+MEM_CHECKER=
 
 .PHONY: tests
 
@@ -26,5 +27,5 @@ tests/%.out: tests/%.c out/server.o out/client.o
 
 tests: $(TESTS)
 	for test_file in tests/*.out; do \
-		 ./$$test_file;			 	 \
+		 $(MEM_CHECKER) ./$$test_file;			 	 \
 	done

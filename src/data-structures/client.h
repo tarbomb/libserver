@@ -1,6 +1,8 @@
 #ifndef LIB_SERVER_CLIENT_H
 #define LIB_SERVER_CLIENT_H
 
+#define CT_ARRAY_STACK_ONLY
+
 #include "structures/array.h"
 
 /*

@@ -46,4 +46,6 @@ struct LibServerServer libserver_init(const char *mutex) {
 void libserver_free(struct LibServerServer server) {
     pthread_mutex_destroy(server.mutex);
     libserver_client_array_free(&server.clients);
+
+    free(server.clients.contents);
 }
