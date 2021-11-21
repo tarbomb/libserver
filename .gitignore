@@ -7,8 +7,9 @@
 *.obj
 *.elf
 
-# Directories
+# Misc
 out/
+vgcore.*
 
 # Linker output
 *.ilk
