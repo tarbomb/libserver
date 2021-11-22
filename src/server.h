@@ -16,7 +16,7 @@
  * clients.
 */
 struct LibServerServer {
-    int memory_key;
+    int mutex_id;
     pthread_mutex_t *mutex;
     struct LibServerClientArray clients;
 };
