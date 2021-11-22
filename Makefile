@@ -5,7 +5,7 @@ CFLAGS=-Wall -Wextra -lpthread -Wno-unused-function -g
 TESTS=$(patsubst %.c,%.out,$(wildcard tests/*.c))
 MEM_CHECKER=
 
-.PHONY: tests
+.PHONY: tests clean
 
 build: out/server.o out/client.o out/shm-tools.o $(TESTS)
 
@@ -32,3 +32,6 @@ tests: $(TESTS)
 	for test_file in tests/*.out; do \
 		 $(MEM_CHECKER) ./$$test_file;			 	 \
 	done
+
+clean:
+	rm -f tests/*.out

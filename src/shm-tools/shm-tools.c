@@ -57,7 +57,7 @@ int shmtools_get_id_create(const char *file, size_t size) {
         fclose(fopen(file, "w+"));
     }
 
-    return shmtools_get_id_create(file, size);
+    return shmtools_get_id(file, size);
 }
 
 void *shmtools_attach(int id) {
