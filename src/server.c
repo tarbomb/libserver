@@ -14,6 +14,7 @@
 #include <sys/mman.h>
 
 #include "server.h"
+#include "shm-tools/shm-tools.h"
 #include "data-structures/client.h"
 
 struct LibServerServer libserver_init(const char *mutex) {
