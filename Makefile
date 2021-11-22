@@ -1,7 +1,7 @@
 CC=cc
 PREFIX=/usr/local/lib
 HEADER_PREFIX = /usr/local/include
-CFLAGS=-ansi -Wall -Wextra -lpthread -g
+CFLAGS=-Wall -Wextra -lpthread -Wno-unused-function -g
 TESTS=$(patsubst %.c,%.out,$(wildcard tests/*.c))
 MEM_CHECKER=
 

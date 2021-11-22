@@ -17,7 +17,6 @@
 #include "data-structures/client.h"
 
 struct LibServerServer libserver_init(const char *mutex) {
-    key_t memory_key = 0;
     int mutex_id = 0;
     pthread_mutexattr_t attribute = {0};
     struct LibServerServer new_server = {0};
@@ -32,8 +31,8 @@ struct LibServerServer libserver_init(const char *mutex) {
     new_server.clients.physical_size = LIB_SERVER_DEFAULT_CLIENT_LENGTH;
 
     /* Setup shared memory and new mutex */
-    memory_key = ftok(mutex, 0);
-    mutex_id = shmget(memory_key, sizeof(pthread_mutex_t), 0644 | IPC_CREAT);
+    new_server.memory_key = ftok(mutex, 0);
+    mutex_id = shmget(new_server.memory_key, sizeof(pthread_mutex_t), 0644 | IPC_CREAT);
     new_server.mutex = shmat(mutex_id, NULL, 0);
 
     pthread_mutexattr_init(&attribute);
@@ -46,6 +45,9 @@ struct LibServerServer libserver_init(const char *mutex) {
 void libserver_free(struct LibServerServer server) {
     pthread_mutex_destroy(server.mutex);
     libserver_client_array_free(&server.clients);
+
+    /* Delete the shared memory */
+    shmctl(server.memory_key, IPC_RMID, NULL);
 
     free(server.clients.contents);
 }

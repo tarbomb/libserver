@@ -9,6 +9,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <assert.h>
+#include <poll.h>
 
 #define LIB_SERVER_TESTING_ERROR_LENGTH 512
 
@@ -40,6 +41,35 @@ static void libserver_extract_error(size_t length, char buffer[], void (*callbac
     dup2(communication[1], STDERR_FILENO);
     callback(); 
     close(communication[1]);
+}
+
+static int libserver_read_with_timeout(int descriptor, char buffer[], size_t length, int timeout) {
+    int waited = 0;
+    struct pollfd descriptors[1];
+
+    descriptors->fd = descriptor;
+    descriptors->events = POLLRDNORM;
+
+    /* Poll until a timeout is reached */
+    while(waited < timeout) {
+        int events = poll(descriptors, 1, 1000); 
+
+        if(events <= 0) {
+            waited++;
+            continue;
+        }
+
+        if((descriptors->revents & POLLRDNORM) == 0) {
+            waited++;
+            continue;
+        }
+
+        read(descriptor, buffer, length);
+
+        return 0;
+    }
+
+    return 1;
 }
 
 #endif
