@@ -1,5 +1,5 @@
 /*
- * Prototypes and important structures for libserver.
+ * Prototypes and important structures for the server object.
 */
 
 #ifndef LIB_SERVER_H
@@ -29,7 +29,7 @@ struct LibServerServer {
  * @param mutex_file: the file to map the mutex to
  * @return: the new server
 */
-struct LibServerServer libserver_init(const char *mutex_file);
+struct LibServerServer libserver_server_init(const char *mutex_file);
 
 /*
  * Releases a server structure from memory.
@@ -37,7 +37,7 @@ struct LibServerServer libserver_init(const char *mutex_file);
  * @param server: the server to release
  * @param mutex_file: the file the mutex is mapped to
 */
-void libserver_free(struct LibServerServer server, const char *mutex_file);
+void libserver_server_free(struct LibServerServer server, const char *mutex_file);
 
 
 #endif

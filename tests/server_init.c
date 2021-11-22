@@ -17,18 +17,18 @@ int check_error(const char *expected, void (*callback)(const char *file)) {
 }
 
 void error_null_file() {
-    struct LibServerServer new_server = libserver_init(NULL);
+    struct LibServerServer new_server = libserver_server_init(NULL);
 }
 
 int main(void) {
-    struct LibServerServer new_server = libserver_init("./mutex");
+    struct LibServerServer new_server = libserver_server_init("./mutex");
 
-    assert(check_error("libserver_init: attempt to map shared mutex to NULL pointer\n", error_null_file) == 1);
+    assert(check_error("libserver_server_init: attempt to map shared mutex to NULL pointer\n", error_null_file) == 1);
     assert(new_server.clients.contents != NULL);
     assert(new_server.clients.logical_size == 0);
     assert(new_server.clients.physical_size == LIB_SERVER_DEFAULT_CLIENT_LENGTH);
 
-    libserver_free(new_server, "./mutex");
+    libserver_server_free(new_server, "./mutex");
 
     return 0;
 }

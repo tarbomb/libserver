@@ -1,24 +1,18 @@
 /*
- * The main file for controlling the server. The main loop of the server goes roughly
- * like this:
- *
- * 1) Poll for any clients requesting to connect to the server on the server's input pipe
- * 2) Poll for any requests from the connected clients
- * 3) Distribute any events
- * 4) Repeat
+ * Operations on a server object.
 */
 
 #include <stdlib.h>
+#include <unistd.h>
 #include <pthread.h>
 #include <sys/shm.h>
 #include <sys/mman.h>
-#include <unistd.h>
 
 #include "server.h"
-#include "../shm-tools/shm-tools.h"
 #include "client.h"
+#include "../shm-tools/shm-tools.h"
 
-struct LibServerServer libserver_init(const char *mutex_file) {
+struct LibServerServer libserver_server_init(const char *mutex_file) {
     int mutex_id = 0;
     pthread_mutexattr_t attribute = {0};
     struct LibServerServer new_server = {0};
@@ -43,7 +37,7 @@ struct LibServerServer libserver_init(const char *mutex_file) {
     return new_server;
 }
 
-void libserver_free(struct LibServerServer server, const char *mutex_file) {
+void libserver_server_free(struct LibServerServer server, const char *mutex_file) {
     pthread_mutex_destroy(server.mutex);
     libserver_client_array_free(&server.clients);
 
