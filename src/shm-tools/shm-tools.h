@@ -44,12 +44,12 @@ void *shmtools_attach(int id);
 
 /*
  * 'Detaches' from the block of shared memory associated with
- * the provided id. If the shared memory block could not be
+ * the provided address. If the shared memory block could not be
  * attached, an error message is displayed and the program exits.
  *
- * @param id: the block of shared memeory to attach to
+ * @param block: address to the block of shared memory
 */
-void shmtools_detach(int id);
+void shmtools_detach(void *block);
 
 /*
  * Destroys the block of shared memory associated with the

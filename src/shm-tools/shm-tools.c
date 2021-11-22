@@ -59,3 +59,31 @@ int shmtools_get_id_create(const char *file, size_t size) {
 
     return shmtools_get_id_create(file, size);
 }
+
+void *shmtools_attach(int id) {
+    void *shared_block = shmat(id, NULL, 0);
+
+    /* Shmat returns -1 casted to a void pointer to show errors
+     * for some reason. */
+    if(shared_block == ((void *) -1)) {
+        shmtools_error("shmtools_attach: failed to attach to memory block with id %i - '%s'\n", id, strerror(errno));
+    }
+
+    return shared_block;
+}
+
+void shmtools_detach(void *block) {
+    int success = shmdt(block);
+
+    if(success == -1) {
+        shmtools_error("shmtools_detach: failed to detach memory block at address %p - '%s'\n", block, strerror(errno));
+    }
+}
+
+void shmtools_destroy(int id) {
+    int success = shmctl(id, IPC_RMID, NULL);
+
+    if(success == -1) {
+        shmtools_error("shmtools_destroy: failed to destroy memory block with id %i - '%s'\n", id, strerror(errno));
+    }
+}
