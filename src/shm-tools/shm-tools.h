@@ -61,12 +61,4 @@ void shmtools_detach(void *block);
 */
 void shmtools_destroy(int id);
 
-
-
-
-
-
-
-
-
 #endif
