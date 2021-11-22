@@ -16,7 +16,6 @@
  * clients.
 */
 struct LibServerServer {
-    int mutex_id;
     pthread_mutex_t *mutex;
     struct LibServerClientArray clients;
 };
@@ -26,17 +25,18 @@ struct LibServerServer {
  * mutex that is mapped to a file. If the file does not exist,
  * it is created.
  *
- * @param mutex: the file to map the mutex to
+ * @param mutex_file: the file to map the mutex to
  * @return: the new server
 */
-struct LibServerServer libserver_init(const char *mutex);
+struct LibServerServer libserver_init(const char *mutex_file);
 
 /*
  * Releases a server structure from memory.
  *
  * @param server: the server to release
+ * @param mutex_file: the file the mutex is mapped to
 */
-void libserver_free(struct LibServerServer server);
+void libserver_free(struct LibServerServer server, const char *mutex_file);
 
 
 #endif

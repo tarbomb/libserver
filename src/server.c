@@ -12,16 +12,18 @@
 #include <pthread.h>
 #include <sys/shm.h>
 #include <sys/mman.h>
+#include <unistd.h>
 
 #include "server.h"
 #include "shm-tools/shm-tools.h"
 #include "data-structures/client.h"
 
-struct LibServerServer libserver_init(const char *mutex) {
+struct LibServerServer libserver_init(const char *mutex_file) {
+    int mutex_id = 0;
     pthread_mutexattr_t attribute = {0};
     struct LibServerServer new_server = {0};
 
-    if(mutex == NULL) {
+    if(mutex_file == NULL) {
         fprintf(stderr, "%s", "libserver_init: attempt to map shared mutex to NULL pointer\n");
         exit(EXIT_FAILURE);
     }
@@ -31,8 +33,8 @@ struct LibServerServer libserver_init(const char *mutex) {
     new_server.clients.physical_size = LIB_SERVER_DEFAULT_CLIENT_LENGTH;
 
     /* Setup shared memory and new mutex */
-    new_server.mutex_id = shmtools_get_id_create(mutex, sizeof(pthread_mutex_t));
-    new_server.mutex = (pthread_mutex_t*) shmtools_attach(new_server.mutex_id);
+    mutex_id = shmtools_get_id_create(mutex_file, sizeof(pthread_mutex_t));
+    new_server.mutex = (pthread_mutex_t*) shmtools_attach(mutex_id);
 
     pthread_mutexattr_init(&attribute);
     pthread_mutexattr_setpshared(&attribute, PTHREAD_PROCESS_SHARED);
@@ -41,12 +43,13 @@ struct LibServerServer libserver_init(const char *mutex) {
     return new_server;
 }
 
-void libserver_free(struct LibServerServer server) {
+void libserver_free(struct LibServerServer server, const char *mutex_file) {
     pthread_mutex_destroy(server.mutex);
     libserver_client_array_free(&server.clients);
 
-    /* Delete the shared memory */
-    shmtools_destroy(server.mutex_id);
+    /* Delete the shared memory and mutex file */
+    shmtools_destroy(shmtools_get_id(mutex_file, sizeof(pthread_mutex_t)));
+    unlink(mutex_file);
 
     free(server.clients.contents);
 }

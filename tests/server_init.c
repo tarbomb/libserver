@@ -28,7 +28,7 @@ int main(void) {
     assert(new_server.clients.logical_size == 0);
     assert(new_server.clients.physical_size == LIB_SERVER_DEFAULT_CLIENT_LENGTH);
 
-    libserver_free(new_server);
+    libserver_free(new_server, "./mutex");
 
     return 0;
 }
