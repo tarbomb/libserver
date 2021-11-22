@@ -15,8 +15,8 @@
 #include <unistd.h>
 
 #include "server.h"
-#include "shm-tools/shm-tools.h"
-#include "data-structures/client.h"
+#include "../shm-tools/shm-tools.h"
+#include "client.h"
 
 struct LibServerServer libserver_init(const char *mutex_file) {
     int mutex_id = 0;

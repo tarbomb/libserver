@@ -6,7 +6,7 @@
 #include <assert.h>
 
 #include "common.h"
-#include "../src/server.h"
+#include "../src/objects/server.h"
 
 int check_error(const char *expected, void (*callback)(const char *file)) {
     char error_message[LIB_SERVER_TESTING_ERROR_LENGTH] = {0};

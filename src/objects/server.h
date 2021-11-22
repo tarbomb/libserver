@@ -6,7 +6,8 @@
 #define LIB_SERVER_H
 
 #include <pthread.h>
-#include "data-structures/client.h"
+
+#include "client.h"
 
 #define LIB_SERVER_DEFAULT_CLIENT_LENGTH 5
 
