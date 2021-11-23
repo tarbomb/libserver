@@ -9,7 +9,8 @@
 
 #include "client.h"
 
-#define LIB_SERVER_DEFAULT_CLIENT_LENGTH 5
+#define LIB_SERVER_MUTEX_NAME               "libserver_mutex"
+#define LIB_SERVER_DEFAULT_CLIENT_LENGTH    5
 
 /*
  * A structure containing the current state of the server,
@@ -47,6 +48,13 @@ void libserver_server_free(struct LibServerServer server, const char *mutex_file
 */
 void libserver_server_add_client(struct LibServerServer *server, int process_id);
 
+/*
+ * Initializes a mutex into a server, based off a directory location.
+ *
+ * @param server: the server to load the mutex into
+ * @param directory: the directory that the mutex should be created in
+*/
+void libserver_server_init_mutex(struct LibServerServer *server, const char *directory);
 
 
 #endif

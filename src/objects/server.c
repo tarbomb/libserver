@@ -2,6 +2,8 @@
  * Operations on a server object.
 */
 
+#include <fcntl.h>
+#include <limits.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <pthread.h>
@@ -12,13 +14,28 @@
 #include "client.h"
 #include "../shm-tools/shm-tools.h"
 
-struct LibServerServer libserver_server_init(const char *mutex_file) {
+void libserver_server_init_mutex(struct LibServerServer *server, const char *directory) {
     int mutex_id = 0;
+    char mutex_file[PATH_MAX] = {0};
     pthread_mutexattr_t attribute = {0};
+
+    strcat(mutex_file, directory);
+    strcat(mutex_file, LIB_SERVER_MUTEX_NAME);
+
+    mutex_id = shmtools_get_id_create(mutex_file, sizeof(pthread_mutex_t));
+    server->mutex = (pthread_mutex_t*) shmtools_attach(mutex_id);
+
+    pthread_mutexattr_init(&attribute);
+    pthread_mutexattr_setpshared(&attribute, PTHREAD_PROCESS_SHARED);
+    pthread_mutex_init(server->mutex, &attribute);
+}
+
+struct LibServerServer libserver_server_init(const char *directory) {
+    int mutex_id = 0;
     struct LibServerServer new_server = {0};
 
-    if(mutex_file == NULL) {
-        fprintf(stderr, "%s", "libserver_init: attempt to map shared mutex to NULL pointer\n");
+    if(directory == NULL) {
+        fprintf(stderr, "%s", "libserver_init: attempt to generate server information at NULL directory\n");
         exit(EXIT_FAILURE);
     }
 
@@ -27,12 +44,7 @@ struct LibServerServer libserver_server_init(const char *mutex_file) {
     new_server.clients.physical_size = LIB_SERVER_DEFAULT_CLIENT_LENGTH;
 
     /* Setup shared memory and new mutex */
-    mutex_id = shmtools_get_id_create(mutex_file, sizeof(pthread_mutex_t));
-    new_server.mutex = (pthread_mutex_t*) shmtools_attach(mutex_id);
-
-    pthread_mutexattr_init(&attribute);
-    pthread_mutexattr_setpshared(&attribute, PTHREAD_PROCESS_SHARED);
-    pthread_mutex_init(new_server.mutex, &attribute);
+    libserver_server_init_mutex(&new_server, directory);
 
     return new_server;
 }
