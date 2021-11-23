@@ -10,6 +10,7 @@
 # Misc
 out/
 vgcore.*
+*_mutex
 
 # Linker output
 *.ilk

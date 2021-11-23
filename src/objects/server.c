@@ -31,7 +31,6 @@ void libserver_server_init_mutex(struct LibServerServer *server, const char *dir
 }
 
 struct LibServerServer libserver_server_init(const char *directory) {
-    int mutex_id = 0;
     struct LibServerServer new_server = {0};
 
     if(directory == NULL) {
