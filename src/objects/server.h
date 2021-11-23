@@ -12,6 +12,7 @@
 
 #define LIB_SERVER_MUTEX_NAME               "libserver_mutex"
 #define LIB_SERVER_CLIENT_DIRECTORY         "libserver_clients"
+#define LIB_SERVER_REGISTRATION_PIPE        "libserver_registration"
 #define LIB_SERVER_DEFAULT_CLIENT_LENGTH    5
 
 #define LIB_SERVER_EXIT_CODE                EXIT_FAILURE
@@ -32,18 +33,17 @@ struct LibServerServer {
  * mutex that is mapped to a file. If the file does not exist,
  * it is created.
  *
- * @param mutex_file: the file to map the mutex to
+ * @param directory: the location that the server should place its mutex, clients, etc
  * @return: the new server
 */
-struct LibServerServer libserver_server_init(const char *mutex_file);
+struct LibServerServer libserver_server_init(const char *directory);
 
 /*
  * Releases a server structure from memory.
  *
  * @param server: the server to release
- * @param mutex_file: the file the mutex is mapped to
 */
-void libserver_server_free(struct LibServerServer server, const char *mutex_file);
+void libserver_server_free(struct LibServerServer server);
 
 /*
  * Initializes a new client and adds it to the server's
@@ -61,5 +61,11 @@ void libserver_server_add_client(struct LibServerServer *server, int process_id)
 */
 void libserver_server_init_mutex(struct LibServerServer *server, const char *directory);
 
+/*
+ * Cleans up all clients, and the registration pipe.
+ *
+ * @param server: the server to cleanup the files of
+*/
+void libserver_server_cleanup(struct LibServerServer server);
 
 #endif

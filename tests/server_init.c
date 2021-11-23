@@ -18,17 +18,20 @@ int check_error(const char *expected, void (*callback)(const char *file)) {
 
 void error_null_file() {
     struct LibServerServer new_server = libserver_server_init(NULL);
+
+    libserver_server_free(new_server);
 }
 
 int main(void) {
     struct LibServerServer new_server = libserver_server_init("./");
 
-    assert(check_error("libserver_init: attempt to generate server information at NULL directory\n", error_null_file) == 1);
+    assert(strcmp(new_server.directory, "./") == 0);
     assert(new_server.clients.contents != NULL);
     assert(new_server.clients.logical_size == 0);
     assert(new_server.clients.physical_size == LIB_SERVER_DEFAULT_CLIENT_LENGTH);
+    assert(check_error("libserver_init: attempt to generate server information at NULL directory\n", error_null_file) == 1);
 
-    libserver_server_free(new_server, "./");
+    libserver_server_free(new_server);
 
     return 0;
 }

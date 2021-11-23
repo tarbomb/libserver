@@ -51,9 +51,12 @@ struct LibServerServer libserver_server_init(const char *directory) {
     return new_server;
 }
 
-void libserver_server_free(struct LibServerServer server, const char *mutex_file) {
+void libserver_server_free(struct LibServerServer server) {
+    char mutex_file[PATH_MAX] = {0};
+
     pthread_mutex_destroy(server.mutex);
     libserver_client_array_free(&server.clients);
+    sprintf(mutex_file, "%s/%s", server.directory, LIB_SERVER_MUTEX_NAME);
 
     /* Delete the shared memory and mutex file */
     shmtools_destroy(shmtools_get_id(mutex_file, sizeof(pthread_mutex_t)));
@@ -78,4 +81,8 @@ void libserver_server_add_client(struct LibServerServer *server, int process_id)
     }
 
     libserver_client_array_append(&server->clients, new_client);
+}
+
+void libserver_server_cleanup(struct LibServerServer server) {
+
 }

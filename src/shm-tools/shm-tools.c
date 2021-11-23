@@ -55,7 +55,6 @@ int shmtools_get_id(const char *file, size_t size) {
 int shmtools_get_id_create(const char *file, size_t size) {
     if(shmtools_file_exists(file) == 0) {
         fclose(fopen(file, "w+"));
-        printf("Making file..\n");
     }
 
     return shmtools_get_id(file, size);

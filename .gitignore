@@ -11,6 +11,7 @@
 out/
 vgcore.*
 *_mutex
+libserver_clients/
 
 # Linker output
 *.ilk
