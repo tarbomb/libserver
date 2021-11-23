@@ -5,12 +5,16 @@
 #ifndef LIB_SERVER_H
 #define LIB_SERVER_H
 
+#include <stdlib.h>
 #include <pthread.h>
 
 #include "client.h"
 
 #define LIB_SERVER_MUTEX_NAME               "libserver_mutex"
+#define LIB_SERVER_CLIENT_DIRECTORY         "libserver_clients"
 #define LIB_SERVER_DEFAULT_CLIENT_LENGTH    5
+
+#define LIB_SERVER_EXIT_CODE                EXIT_FAILURE
 
 /*
  * A structure containing the current state of the server,
@@ -20,6 +24,7 @@
 struct LibServerServer {
     pthread_mutex_t *mutex;
     struct LibServerClientArray clients;
+    const char *directory;
 };
 
 /*
