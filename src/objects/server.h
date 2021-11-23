@@ -39,5 +39,14 @@ struct LibServerServer libserver_server_init(const char *mutex_file);
 */
 void libserver_server_free(struct LibServerServer server, const char *mutex_file);
 
+/*
+ * Initializes a new client and adds it to the server's
+ * array of clients.
+ *
+ * @param process_id: the process id of the client to mark down
+*/
+void libserver_server_add_client(struct LibServerServer *server, int process_id);
+
+
 
 #endif

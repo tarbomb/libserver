@@ -10,6 +10,7 @@
  * the server.
 */
 struct LibServerClient {
+    int from_client;
     int process_id;
 };
 

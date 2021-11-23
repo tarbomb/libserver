@@ -47,3 +47,11 @@ void libserver_server_free(struct LibServerServer server, const char *mutex_file
 
     free(server.clients.contents);
 }
+
+void libserver_server_add_client(struct LibServerServer *server, int process_id) {
+    struct LibServerClient new_client = {0};
+
+    new_client.process_id = process_id;
+
+    libserver_client_array_append(&server->clients, new_client);
+}
