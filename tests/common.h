@@ -5,11 +5,12 @@
 #ifndef LIB_SERVER_TESTING_COMMON_H
 #define LIB_SERVER_TESTING_COMMON_H
 
+#include <poll.h>
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
 #include <assert.h>
-#include <poll.h>
+#include <sys/stat.h>
 
 #define LIB_SERVER_TESTING_ERROR_LENGTH 512
 
@@ -66,6 +67,23 @@ static int libserver_read_with_timeout(int descriptor, char buffer[], size_t len
 
         read(descriptor, buffer, length);
 
+        return 0;
+    }
+
+    return 1;
+}
+
+/*
+ * Returns whether or not the file pointed to by the path
+ * PATH exists on the file system.
+ *
+ * @param: the path to check
+ * @return: 0 if the path does not exist, 1 if it does
+*/
+static int libserver_file_exists(const char *path) {
+    struct stat stat_buffer = {0};
+
+    if(stat(path, &stat_buffer) == -1) {
         return 0;
     }
 
