@@ -62,6 +62,13 @@ void libserver_server_add_client(struct LibServerServer *server, int process_id)
 void libserver_server_init_mutex(struct LibServerServer *server, const char *directory);
 
 /*
+ * Cleans up the client pipes attached to this server.
+ *
+ * @param server: the server to cleanup the files of
+*/
+void libserver_server_cleanup_clients(struct LibServerServer server);
+
+/*
  * Cleans up all clients, and the registration pipe.
  *
  * @param server: the server to cleanup the files of

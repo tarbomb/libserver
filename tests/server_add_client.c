@@ -17,6 +17,7 @@ int main(void) {
     libserver_server_add_client(&server, 1);
 
     libserver_server_free(server);
+    libserver_server_cleanup(server);
 
     return EXIT_SUCCESS;
 }

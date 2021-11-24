@@ -4,6 +4,7 @@
 
 #include <fcntl.h>
 #include <errno.h>
+#include <dirent.h>
 #include <limits.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -83,6 +84,36 @@ void libserver_server_add_client(struct LibServerServer *server, int process_id)
     libserver_client_array_append(&server->clients, new_client);
 }
 
-void libserver_server_cleanup(struct LibServerServer server) {
+/* Cleanup functionality */
+void libserver_server_cleanup_clients(struct LibServerServer server) {
+    char clients_directory_path[PATH_MAX] = {0};
+    DIR *clients_directory = NULL;
+    struct dirent *client_file = NULL;
+    
+    sprintf(clients_directory_path, "%s/%s", server.directory, LIB_SERVER_CLIENT_DIRECTORY);
+    clients_directory = opendir(clients_directory_path);
+    client_file = readdir(clients_directory);
 
+    while(client_file != NULL) {
+        char file_path[PATH_MAX] = {0};
+
+        sprintf(file_path, "%s/%s/%s", server.directory, LIB_SERVER_CLIENT_DIRECTORY,client_file->d_name);
+        unlink(file_path);
+
+        client_file = readdir(clients_directory);
+    }
+
+    closedir(clients_directory);
+}
+
+void libserver_server_cleanup(struct LibServerServer server) {
+    char registration_pipe[PATH_MAX] = {0};
+    char clients_directory[PATH_MAX] = {0};
+
+    sprintf(registration_pipe, "%s/%s", server.directory, LIB_SERVER_REGISTRATION_PIPE);
+    sprintf(clients_directory, "%s/%s", server.directory, LIB_SERVER_CLIENT_DIRECTORY);
+
+    libserver_server_cleanup_clients(server);
+    unlink(registration_pipe);
+    rmdir(clients_directory);
 }

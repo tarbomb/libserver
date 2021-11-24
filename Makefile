@@ -17,12 +17,15 @@ $(PREFIX)/libserver.so: out/*.o
 	$(CC) -shared -o $(PREFIX)/libserver.so out/*.o
 
 out/server.o: src/objects/server.c src/objects/server.h
+	mkdir -p out/
 	$(CC) -c src/objects/server.c -o out/server.o -fpic $(CFLAGS)
 
 out/client.o: src/objects/client.c src/objects/client.h
+	mkdir -p out/
 	$(CC) -c src/objects/client.c -o out/client.o -fpic $(CFLAGS)
 
 out/shm-tools.o: src/shm-tools/shm-tools.c src/shm-tools/shm-tools.h
+	mkdir -p out/
 	$(CC) -c src/shm-tools/shm-tools.c -o out/shm-tools.o -fpic $(CFLAGS)
 
 tests/%.out: tests/%.c out/server.o out/client.o out/shm-tools.o
@@ -34,4 +37,5 @@ tests: $(TESTS)
 	done
 
 clean:
-	rm -f tests/*.out
+	rm tests/*.out
+	rm -r out/
