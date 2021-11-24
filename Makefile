@@ -1,9 +1,9 @@
-CC=cc
-PREFIX=/usr/local/lib
-HEADER_PREFIX = /usr/local/include
-CFLAGS=-Wall -Wextra -lpthread -Wno-unused-function -g
+CC ?= cc
+PREFIX ?= /usr/local/lib
+HEADER_PREFIX = ?= /usr/local/include
+CFLAGS ?= -Wall -Wextra -lpthread -Wno-unused-function -g
 TESTS=$(patsubst %.c,%.out,$(wildcard tests/*.c))
-MEM_CHECKER=
+MEM_CHECKER ?=
 
 .PHONY: tests clean
 
@@ -32,8 +32,9 @@ tests/%.out: tests/%.c out/server.o out/client.o out/shm-tools.o
 	$(CC) $< out/shm-tools.o out/server.o out/client.o -o $@ $(CFLAGS)
 
 tests: $(TESTS)
-	for test_file in tests/*.out; do \
-		 $(MEM_CHECKER) ./$$test_file;			 	 \
+	for test_file in tests/*.out; do 				\
+		 $(MEM_CHECKER) ./$$test_file;				\
+		 printf "Test '%s' finished\n" $$test_file;	\
 	done
 
 clean:
