@@ -16,6 +16,8 @@ int main(void) {
     mkdir("./" LIB_SERVER_CLIENT_DIRECTORY, 0744);
 
     libserver_server_add_client(&server, 1);
+    libserver_server_add_client(&server, 2);
+    libserver_server_add_client(&server, 3);
 
     libserver_server_free(server);
     libserver_server_cleanup(server);

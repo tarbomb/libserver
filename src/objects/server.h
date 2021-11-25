@@ -54,6 +54,15 @@ void libserver_server_free(struct LibServerServer server);
 void libserver_server_add_client(struct LibServerServer *server, int process_id);
 
 /*
+ * Removes, 'disconnecting' a client from a server, and removes
+ * the pipes used for IPC.
+ *
+ * @param server: the server to remove from
+ * @param process_id: the process id of the client to remove
+*/
+void libserver_server_remove_client(struct LibServerServer *server, int process_id);
+
+/*
  * Initializes a mutex into a server, based off a directory location.
  *
  * @param server: the server to load the mutex into

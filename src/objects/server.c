@@ -84,10 +84,14 @@ void libserver_server_add_client(struct LibServerServer *server, int process_id)
 }
 
 void libserver_server_remove_client(struct LibServerServer *server, int process_id) {
+    char client_from[PATH_MAX] = {0};
     struct LibServerClient search_client = {0};
+
     search_client.process_id = process_id;
+    sprintf(client_from, "%s/%i.from", server->directory, process_id);
 
     libserver_client_array_remove(&server->clients, search_client);
+    unlink(client_from);
 }
 
 /* Cleanup functionality */
