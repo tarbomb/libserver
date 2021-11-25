@@ -59,9 +59,8 @@ void libserver_server_free(struct LibServerServer server) {
     libserver_client_array_free(&server.clients);
     sprintf(mutex_file, "%s/%s", server.directory, LIB_SERVER_MUTEX_NAME);
 
-    /* Delete the shared memory and mutex file */
+    /* Delete the shared memory */
     shmtools_destroy(shmtools_get_id(mutex_file, sizeof(pthread_mutex_t)));
-    unlink(mutex_file);
 
     free(server.clients.contents);
 }
@@ -82,6 +81,13 @@ void libserver_server_add_client(struct LibServerServer *server, int process_id)
     }
 
     libserver_client_array_append(&server->clients, new_client);
+}
+
+void libserver_server_remove_client(struct LibServerServer *server, int process_id) {
+    struct LibServerClient search_client = {0};
+    search_client.process_id = process_id;
+
+    libserver_client_array_remove(&server->clients, search_client);
 }
 
 /* Cleanup functionality */
@@ -109,11 +115,14 @@ void libserver_server_cleanup_clients(struct LibServerServer server) {
 void libserver_server_cleanup(struct LibServerServer server) {
     char registration_pipe[PATH_MAX] = {0};
     char clients_directory[PATH_MAX] = {0};
+    char mutex_file[PATH_MAX] = {0};
 
     sprintf(registration_pipe, "%s/%s", server.directory, LIB_SERVER_REGISTRATION_PIPE);
     sprintf(clients_directory, "%s/%s", server.directory, LIB_SERVER_CLIENT_DIRECTORY);
+    sprintf(mutex_file, "%s/%s", server.directory, LIB_SERVER_MUTEX_NAME);
 
-    libserver_server_cleanup_clients(server);
+    unlink(mutex_file);
     unlink(registration_pipe);
+    libserver_server_cleanup_clients(server);
     rmdir(clients_directory);
 }

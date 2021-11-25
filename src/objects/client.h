@@ -47,4 +47,13 @@ void libserver_client_array_free(struct LibServerClientArray *array);
 */
 struct LibServerClientArray *libserver_client_array_append(struct LibServerClientArray *array, struct LibServerClient value);
 
+/*
+ * Remove a value VALUE from an array ARRAY.
+ *
+ * @param array: the array to remove from
+ * @param value: the value to remove
+ * @return: the array the operation was performed on
+*/
+struct LibServerClientArray *libserver_client_array_remove(struct LibServerClientArray *array, struct LibServerClient value);
+
 #endif
