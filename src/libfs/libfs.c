@@ -1,0 +1,11 @@
+#include<errno.h>
+#include"libfs.h"
+#include<stdio.h>
+#include<assert.h>
+#include<dirent.h>
+#include<limits.h>
+#include<stddef.h>
+#include<string.h>
+#include<unistd.h>
+#include<sys/stat.h>
+int libfs_file_type(const char*path){struct stat stat_buffer={0};if(stat(path,&stat_buffer)==-1){fprintf(stderr,"libfs_file_type:invalid path '%s'.(%s)\n",path,strerror(errno));exit(EXIT_FAILURE);}switch(stat_buffer.st_mode&S_IFMT){case S_IFBLK:return 0;case S_IFCHR:return 1;case S_IFDIR:return 2;case S_IFIFO:return 3;case S_IFLNK:return 4;case S_IFREG:return 5;case S_IFSOCK:return 6;}return 7;}int libfs_path_exists(const char*path){struct stat stat_buffer={0};return stat(path,&stat_buffer)!=-1;}int libfs_path_is_reference(const char*path){char name_buffer[256]={0};if(path==0){fprintf(stderr,"libfs_path_is_reference:attempt to check 0 path");exit(EXIT_FAILURE);}libfs_path_get_name(path,256,name_buffer);return!(strcmp(name_buffer,"..")&&strcmp(name_buffer,"."));}char*libfs_path_get_name(const char*path,size_t length,char*buffer){size_t cursor=0;size_t path_length=0;if(path==0){fprintf(stderr,"libfs_path_get_name:attempt to get the name of a 0 path");exit(EXIT_FAILURE);}path_length=strlen(path)-1;while(1){if(path[path_length]==47){path_length++;break;}if(path_length==0)break;path_length--;}while(path[path_length]&&cursor < length-1){buffer[cursor]=path[path_length];cursor++;path_length++;}buffer[path_length]=0;return buffer;}void libfs_recursive_map_internal(char*path,void(*callback)(const char*path)){size_t length=strlen(path);DIR*directory=opendir(path);struct dirent*entry=0;for(entry=readdir(directory);entry!=0;entry=readdir(directory)){strcat(path,entry->d_name);if(libfs_file_type(path)==2){if(libfs_path_is_reference(path)==1){path[length]=0;continue;}strcat(path,"/");libfs_recursive_map_internal(path,callback);}else{callback(path);}path[length]=0;}closedir(directory);}void libfs_recursive_map(const char*path,void(*callback)(const char*path)){size_t path_length=0;char path_copy[PATH_MAX]={0};strcpy(path_copy,path);path_length=strlen(path_copy);if(path_copy[path_length-1]!=47){path_copy[path_length]=47;path_copy[path_length+1]=0;}libfs_recursive_map_internal(path_copy,callback);}

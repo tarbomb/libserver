@@ -28,7 +28,11 @@ out/shm-tools.o: src/shm-tools/shm-tools.c src/shm-tools/shm-tools.h
 	mkdir -p out/
 	$(CC) -c src/shm-tools/shm-tools.c -o out/shm-tools.o -fpic $(CFLAGS)
 
-tests/%.out: tests/%.c out/server.o out/client.o out/shm-tools.o
+out/libfs.o: src/libfs/libfs.c src/libfs/libfs.h
+	mkdir -p out/
+	$(CC) -c src/libfs/libfs.c -o out/libfs.o -fpic $(CFLAGS)
+
+tests/%.out: tests/%.c out/server.o out/client.o out/shm-tools.o out/libfs.o
 	$(CC) $< out/shm-tools.o out/server.o out/client.o -o $@ $(CFLAGS)
 
 tests: $(TESTS)
