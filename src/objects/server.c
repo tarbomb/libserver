@@ -36,9 +36,6 @@ pthread_mutex_t *libserver_server_init_mutex(struct LibserverServer *server, con
 }
 
 void libserver_server_free(struct LibserverServer *server, const char *mutex) {
-    libserver_client_array_free(&server->clients);
-    libserver_command_array_free(&server->commands);
-
     if(mutex != NULL) {
         shmtools_detach(server->mutex);
         shmtools_destroy(shmtools_get_id(mutex, sizeof(pthread_mutex_t)));
