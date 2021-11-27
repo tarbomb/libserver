@@ -19,16 +19,6 @@ struct LibserverServer libserver_server_init(int port, size_t length, struct pol
     return new_server;
 }
 
-void libserver_server_free(struct LibserverServer *server, const char *mutex) {
-    libserver_client_array_free(&server->clients);
-
-    shmtools_detach(server->mutex);
-    shmtools_destroy(shmtools_get_id(mutex, sizeof(pthread_mutex_t)));
-
-    unlink(mutex);
-    close(server->socket.fd);
-}
-
 pthread_mutex_t *libserver_server_init_mutex(struct LibserverServer *server, const char *mutex) {
     pthread_mutex_t *new_mutex = NULL;
     int mutex_key = shmtools_get_id_create(mutex, sizeof(pthread_mutex_t));
@@ -37,4 +27,14 @@ pthread_mutex_t *libserver_server_init_mutex(struct LibserverServer *server, con
     server->mutex = new_mutex;
 
     return new_mutex;
+}
+
+void libserver_server_free(struct LibserverServer *server, const char *mutex) {
+    libserver_client_array_free(&server->clients);
+
+    shmtools_detach(server->mutex);
+    shmtools_destroy(shmtools_get_id(mutex, sizeof(pthread_mutex_t)));
+
+    unlink(mutex);
+    close(server->socket.fd);
 }

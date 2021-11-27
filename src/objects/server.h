@@ -19,6 +19,11 @@ struct LibserverServer {
     pthread_mutex_t *mutex;
 };
 
+struct LibserverCommand {
+    const char *command;
+    void (*callback)(struct LibserverServer *server, const char *arguments);
+};
+
 /*
  * Initialize a new server structure on the stack.
  *

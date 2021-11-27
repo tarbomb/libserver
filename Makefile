@@ -33,8 +33,8 @@ out/client.o: src/objects/client.*
 	$(CC) $< out/*.o -o $@
 
 check: $(TESTS)
-	@for test_file in tests/*.out; do $(DEBUGGER) ./$$test_file; done
+	@for test_file in tests/*.out; do $(DEBUGGER) ./$$test_file; printf "Test '%s' completed.\n" $$test_file; done
 
 clean:
-	rm -rf out/*.o
-	rm -f tests/*.out
+	$(RM) -r out/
+	$(RM) tests/*.out
