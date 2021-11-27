@@ -114,6 +114,16 @@ struct pollfd libserver_server_add_client(struct LibserverServer *server, int de
 size_t libserver_server_extract_command(const char *command, size_t length, char buffer[]);
 
 /*
+ * Searches through a server's command array for a command with
+ * the name COMMAND, and executes it.
+ *
+ * @param server: the server to search through
+ * @param command: the name of the command
+ * @return: 1 if a command was found, 0 if it was not
+*/
+int libserver_server_dispatch(struct LibserverServer *server, const char *command);
+
+/*
  * Process any incoming inputs on connected sockets, and invoke
  * any commands that the sockets request.
  *

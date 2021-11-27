@@ -92,6 +92,13 @@ size_t libserver_server_extract_command(const char *command, size_t length, char
     return written;
 }
 
+int libserver_server_dispatch(struct LibserverServer *server, const char *command) {
+    unsigned int index = 0;
+
+
+    return 0;
+}
+
 int libserver_server_process(struct LibserverServer *server) {
     int processed = 0;
     unsigned int index = 0;
