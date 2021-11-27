@@ -32,6 +32,7 @@ pthread_mutex_t *libserver_server_init_mutex(struct LibserverServer *server, con
 
 void libserver_server_free(struct LibserverServer *server, const char *mutex) {
     libserver_client_array_free(&server->clients);
+    libserver_command_array_free(&server->commands);
 
     shmtools_detach(server->mutex);
     shmtools_destroy(shmtools_get_id(mutex, sizeof(pthread_mutex_t)));
@@ -42,6 +43,19 @@ void libserver_server_free(struct LibserverServer *server, const char *mutex) {
 
 void libserver_server_init_commands(struct LibserverServer *server, size_t length, struct LibserverCommand commands[]) {
     server->commands = libserver_command_array_init(length, commands);
+}
+
+/*
+ * Registers a new command into the server that will be invoked when
+ * a socket sends a requested prefixed with the command.
+ *
+ * @param name: the name of the command
+ * @param callback: the function to invoke
+ * @return: a copy of the command
+*/
+struct LibserverCommand libserver_server_add_command(struct LibserverServer *server, const char *name,
+                                                     void (*callback)(struct LibserverServer *server, int descriptor, const char *arguments)) {
+
 }
 
 /* Command array operations */

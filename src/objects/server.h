@@ -17,7 +17,7 @@ struct LibserverServer;
 */
 struct LibserverCommand {
     const char *command;
-    void (*callback)(struct LibserverServer *server, const char *arguments);
+    void (*callback)(struct LibserverServer *server, int descriptor, const char *arguments);
 };
 
 /*
@@ -79,6 +79,17 @@ pthread_mutex_t *libserver_server_init_mutex(struct LibserverServer *server, con
  * @param commands: the stack array to store in
 */
 void libserver_server_init_commands(struct LibserverServer *server, size_t length, struct LibserverCommand commands[]);
+
+/*
+ * Registers a new command into the server that will be invoked when
+ * a socket sends a requested prefixed with the command.
+ *
+ * @param name: the name of the command
+ * @param callback: the function to invoke
+ * @return: a copy of the command
+*/
+struct LibserverCommand libserver_server_add_command(struct LibserverServer *server, const char *name,
+                                                     void (*callback)(struct LibserverServer *server, int descriptor, const char *arguments));
 
 /*
  * Releases a libserver command from memory.
