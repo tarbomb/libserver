@@ -3,15 +3,17 @@
 */
 
 #include <poll.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
 #include "client.h"
 
+
 void libserver_client_array_append(struct LibserverClientArray *array, struct pollfd value) {
     if(array->logical_size == array->physical_size) {
-        array->physical_size = array->physical_size * 2;
-        array->contents = (struct pollfd*) realloc(array->contents, sizeof(struct pollfd) * array->physical_size);
+        fprintf(stderr, "libserver_client_array_append: attempt to insert into full array (array: %p, length: %u)\n", (void *) array, array->physical_size);
+        exit(EXIT_FAILURE);
     }
 
     array->contents[array->logical_size] = value;
@@ -30,8 +32,6 @@ void libserver_client_array_free(struct LibserverClientArray *array) {
    for(index = 0; index < array->logical_size; index++) {
        libserver_client_free(array->contents[index]);
    }
-
-   free(array);
 }
 
 void libserver_client_free(struct pollfd value) {

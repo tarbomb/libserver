@@ -31,7 +31,7 @@ void libserver_server_free(struct LibserverServer *server, const char *mutex) {
 
 pthread_mutex_t *libserver_server_init_mutex(struct LibserverServer *server, const char *mutex) {
     pthread_mutex_t *new_mutex = NULL;
-    int mutex_key = shmtools_get_id_create(file, sizeof(pthread_mutex_t));
+    int mutex_key = shmtools_get_id_create(mutex, sizeof(pthread_mutex_t));
     
     new_mutex = (pthread_mutex_t *) shmtools_attach(mutex_key);
     server->mutex = new_mutex;
