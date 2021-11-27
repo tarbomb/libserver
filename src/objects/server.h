@@ -30,13 +30,22 @@ struct LibserverServer {
 struct LibserverServer libserver_server_init(int port, size_t length, struct pollfd clients[]);
 
 /*
+ * Releases a server, and all of its clients from memory. Also removes
+ * and detaches the shared memory mutex.
+ *
+ * @param server: the server to release
+ * @param mutex: location of the server's mutex
+*/
+void libserver_server_free(struct LibserverServer *server, const char *mutex);
+
+/*
  * Initializes a new shared-memory mutex into a server, using the file at
  * the path FILE. The file is created if it does not exist.
  *
  * @param server: the server to initialize the mutex into
- * @param file: the location to store the mutex in
+ * @param mutex: location to store the server's mutex
  * @return: the new mutex
 */
-pthread_mutex_t *libserver_server_init_mutex(struct LibserverServer *server, const char *file);
+pthread_mutex_t *libserver_server_init_mutex(struct LibserverServer *server, const char *mutex);
 
 #endif
