@@ -71,6 +71,8 @@ struct pollfd libserver_server_add_client(struct LibserverServer *server, int de
     new_client.fd = descriptor;
     new_client.events = POLLRDNORM;
 
+    libserver_client_array_append(&server->clients, new_client);
+
     return new_client;
 }
 
@@ -140,16 +142,5 @@ int libserver_server_process(struct LibserverServer *server) {
         processed++;
     }
 
-
     return processed;
 }
-
-
-
-
-
-
-
-
-
-
