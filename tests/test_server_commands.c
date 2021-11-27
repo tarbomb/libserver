@@ -2,18 +2,17 @@
 #include "common.h"
 
 void ping_command(struct LibserverServer *server, int descriptor, const char *command) {
-
+    return;
 }
 
 void pong_command(struct LibserverServer *server, int descriptor, const char *command) {
-
+    return;
 }
 
 int main(void) {
     struct pollfd clients[LIB_SERVER_MAXIMUM_CLIENTS] = {0};
     struct LibserverCommand commands[LIB_SERVER_MAXIMUM_COMMANDS] = {0};
     struct LibserverServer new_server = libserver_server_init(TEST_PORT);
-
 
     libserver_server_init_mutex(&new_server, "./mutex");
     libserver_server_init_clients(&new_server, LIB_SERVER_MAXIMUM_CLIENTS, clients);

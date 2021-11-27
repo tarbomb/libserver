@@ -16,6 +16,7 @@ struct LibserverServer libserver_server_init(int port) {
     struct LibserverServer new_server = {0};
 
     new_server.socket = libsocket_socket_init(port);
+    libsocket_socket_bind(&new_server.socket, LIB_SERVER_SOCKET_QUEUE);
 
     return new_server;
 }

@@ -10,6 +10,7 @@
 
 #define LIB_SERVER_MAXIMUM_CLIENTS  128
 #define LIB_SERVER_MAXIMUM_COMMANDS 64
+#define LIB_SERVER_SOCKET_QUEUE     10
 
 /*
  * The server structure. Contains an array of connected clients,
