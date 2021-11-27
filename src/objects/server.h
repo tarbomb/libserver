@@ -70,6 +70,17 @@ void libserver_server_free(struct LibserverServer *server, const char *mutex);
 pthread_mutex_t *libserver_server_init_mutex(struct LibserverServer *server, const char *mutex);
 
 /*
+ * Initializes a new array of commands within the server
+ * with a maximum length LENGTH, and with a stack array
+ * COMMANDS.
+ *
+ * @param server: the server to initialize commands into
+ * @param length: the maximum length of the array
+ * @param commands: the stack array to store in
+*/
+void libserver_server_init_commands(struct LibserverServer *server, size_t length, struct LibserverCommand commands[]);
+
+/*
  * Releases a libserver command from memory.
  *
  * @param value: the value to release

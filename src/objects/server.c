@@ -40,6 +40,10 @@ void libserver_server_free(struct LibserverServer *server, const char *mutex) {
     close(server->socket.fd);
 }
 
+void libserver_server_init_commands(struct LibserverServer *server, size_t length, struct LibserverCommand commands[]) {
+    server->commands = libserver_command_array_init(length, commands);
+}
+
 /* Command array operations */
 void libserver_command_free(struct LibserverCommand value) {
     return;

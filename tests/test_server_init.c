@@ -7,7 +7,7 @@
 
 int main(void) {
     struct pollfd clients[LIB_SERVER_MAXIMUM_CLIENTS] = {0};
-    struct LibserverServer new_server = libserver_server_init(5000, LIB_SERVER_MAXIMUM_CLIENTS, clients);
+    struct LibserverServer new_server = libserver_server_init(TEST_PORT, LIB_SERVER_MAXIMUM_CLIENTS, clients);
 
     /* Baisc properties */
     assert(new_server.clients.contents == clients);
