@@ -25,9 +25,8 @@ void libserver_client_free(struct pollfd value);
  *
  * @param array: the array to append to
  * @param value: the poll target to use
- * @return: the client array appended to
 */
-struct LibserverClientArray *libserver_client_array_append(struct LibserverClientArray *array, struct pollfd value);
+void libserver_client_array_append(struct LibserverClientArray *array, struct pollfd value);
 
 /*
  * Release a client array from memory.
