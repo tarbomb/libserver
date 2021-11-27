@@ -25,6 +25,15 @@ struct LibserverCommand {
 };
 
 /*
+ * Array of commands that are registered into a server.
+*/
+struct LibserverCommandArray {
+    unsigned int logical_size;
+    unsigned int physical_size;
+    struct LibserverCommand *contents;
+};
+
+/*
  * Initialize a new server structure on the stack.
  *
  * @param port: the port of the server
