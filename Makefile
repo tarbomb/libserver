@@ -1,6 +1,6 @@
 CC ?= cc
 PREFIX ?=/usr/local/lib
-CFLAGS ?=
+CFLAGS ?= -g
 OBJS=out/libsocket.o out/libfs.o out/shm-tools.o out/server.o out/client.o out/command.o
 TESTS=$(patsubst %.c,%.out,$(wildcard tests/*.c))
 DEBUGGER ?=

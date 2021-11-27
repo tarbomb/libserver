@@ -28,10 +28,8 @@ int main(void) {
     /* Handle requests */
     while(server.alive == 1) {
         libsocket_socket_accept(&server.socket, 500, new_client);
-        printf("Processed clients: %i\n", libserver_server_process(&server));
     }
 
-    printf("%s", "Server ended.\n");
     libserver_server_free(&server, "./mutex");
 
     return EXIT_SUCCESS;

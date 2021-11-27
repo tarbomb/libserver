@@ -96,7 +96,7 @@ size_t libserver_server_extract_command(const char *command, size_t length, char
 
 int libserver_server_dispatch(struct LibserverServer *server, int sender, const char *command) {
     struct LibserverCommand target = {0};
-    unsigned int index = 0;
+    int index = -1;
 
     target.command = command;
     index = libserver_command_array_find(&server->commands, target);
@@ -135,7 +135,7 @@ int libserver_server_process(struct LibserverServer *server) {
         libserver_server_extract_command(client_message, LIB_SERVER_COMMAND_BUFFER, client_command);
 
         /* Execute the command, or handle an error */
-        if(libserver_server_dispatch(server, client.fd, client_message) == 0) {
+        if(libserver_server_dispatch(server, client.fd, client_command) == 0) {
             return -1;
         }
 

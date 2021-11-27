@@ -41,13 +41,14 @@ void libserver_command_array_free(struct LibserverCommandArray *array) {
 }
 
 int libserver_command_array_find(struct LibserverCommandArray *array, struct LibserverCommand value) {
-    size_t index = 0;
+    unsigned int index = 0;
 
     for(index = 0; index < array->logical_size; index++) {
         if(libserver_command_compare(array->contents[index], value) == 0) {
             continue;
         }
 
+        printf("'%s' & '%s' are the same\n", array->contents[index].command, value.command);
         return index;
     }
 

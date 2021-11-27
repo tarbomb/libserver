@@ -10,7 +10,7 @@
 # Misc
 out/
 vgcore.*
-*_mutex
+*mutex
 libserver_clients/
 
 # Linker output
