@@ -29,6 +29,15 @@ void libserver_client_free(struct pollfd value);
 void libserver_client_array_append(struct LibserverClientArray *array, struct pollfd value);
 
 /*
+ * Initializes a new client array on the stack with a stack
+ * array of a specific size.
+ *
+ * @param size: the maximum length of the array
+ * @param block: the array of poll targets
+*/
+struct LibserverClientArray libserver_client_array_init(unsigned int size, struct pollfd *block);
+
+/*
  * Release a client array from memory.
  *
  * @param array: the array to release

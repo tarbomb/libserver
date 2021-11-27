@@ -2,13 +2,12 @@
  * Implementations of the client array and methods.
 */
 
-#include <stdlib.h>
 #include <poll.h>
+#include <stdlib.h>
 #include <unistd.h>
 
 #include "client.h"
 
-/* Client array operations */
 void libserver_client_array_append(struct LibserverClientArray *array, struct pollfd value) {
     if(array->logical_size == array->physical_size) {
         array->physical_size = array->physical_size * 2;
@@ -17,6 +16,12 @@ void libserver_client_array_append(struct LibserverClientArray *array, struct po
 
     array->contents[array->logical_size] = value;
     array->logical_size++;
+}
+
+struct LibserverClientArray libserver_client_array_init(unsigned int size, struct pollfd *block) {
+   struct LibserverClientArray new_array = {0, size, block};
+
+   return new_array;
 }
 
 void libserver_client_array_free(struct LibserverClientArray *array) {
