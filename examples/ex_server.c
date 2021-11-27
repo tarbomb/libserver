@@ -8,9 +8,9 @@ void new_client(struct LibsocketSocket *socket, int connector) {
     libserver_server_add_client(server, connector);
 }
 
-void kill_server(struct LibserverServer *server, int sender, const char *command) {
+void kill_server(struct LibserverServer *server, int sender, const char *message) {
     printf("%s", "Killing server.\n");
-    printf("Command: %s", command);
+    printf("Message: %s", message);
     server->alive = 0;
 }
 

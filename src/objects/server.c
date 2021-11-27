@@ -102,7 +102,7 @@ int libserver_server_dispatch(struct LibserverServer *server, int sender, const 
     index = libserver_command_array_find(&server->commands, target);
 
     if(index >= 0) {
-        server->commands.contents[index].callback(server, sender, command);
+        server->commands.contents[index].callback(server, sender, message);
 
         return 1;
     }
