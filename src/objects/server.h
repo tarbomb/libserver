@@ -8,9 +8,9 @@
 #include "command.h"
 #include "../libsocket/libsocket.h"
 
+#define LIB_SERVER_SOCKET_QUEUE     10
 #define LIB_SERVER_MAXIMUM_CLIENTS  128
 #define LIB_SERVER_MAXIMUM_COMMANDS 64
-#define LIB_SERVER_SOCKET_QUEUE     10
 
 /*
  * The server structure. Contains an array of connected clients,
@@ -75,14 +75,17 @@ void libserver_server_init_clients(struct LibserverServer *server, size_t length
 
 /*
  * Registers a new command into the server that will be invoked when
- * a socket sends a requested prefixed with the command.
+ * a socket sends a requested prefixed with the command. The type
+ * signature of the callback should look as such:
+ *
+ * void callback(struct LibserverServer*, int, const char*);
  *
  * @param name: the name of the command
  * @param callback: the function to invoke
  * @return: a copy of the command
 */
-struct LibserverCommand libserver_server_add_command(struct LibserverServer *server, const char *name,
-                                                     void (*callback)(struct LibserverServer *server, int descriptor, const char *arguments));
+struct LibserverCommand
+libserver_server_add_command(struct LibserverServer *server, const char *name, LibseverCallback callback);
 
 /*
  * Adds a new client to a server's array of clients.
@@ -93,7 +96,11 @@ struct LibserverCommand libserver_server_add_command(struct LibserverServer *ser
 */
 struct pollfd libserver_server_add_client(struct LibserverServer *server, int descriptor);
 
-
+/*
+ * Process any incoming inputs on connected sockets, and dispatching
+ * commands
+*/
+int libserver_server_process(struct LibserverServer *server);
 
 
 

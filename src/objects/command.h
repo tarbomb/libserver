@@ -2,13 +2,14 @@
 #define LIB_SERVER_COMMAND_H
 
 struct LibserverServer;
+typedef void (*LibseverCallback)(struct LibserverServer *server, int descriptor, const char *arguments);
 
 /*
  * Represents a command that the server can execute.
 */
 struct LibserverCommand {
     const char *command;
-    void (*callback)(struct LibserverServer *server, int descriptor, const char *arguments);
+    LibseverCallback callback;
 };
 
 /*
