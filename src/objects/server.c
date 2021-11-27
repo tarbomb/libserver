@@ -132,6 +132,11 @@ int libserver_server_process(struct LibserverServer *server) {
         read(client.fd, client_message, LIB_SERVER_READ_BUFFER);
         libserver_server_extract_command(client_message, LIB_SERVER_COMMAND_BUFFER, client_command);
 
+        /* Execute the command, or handle an error */
+        if(libserver_server_dispatch(server, client.fd, client_message) == 0) {
+            return -1;
+        }
+
         processed++;
     }
 

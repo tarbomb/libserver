@@ -129,7 +129,7 @@ int libserver_server_dispatch(struct LibserverServer *server, int sender, const 
  * any commands that the sockets request.
  *
  * @param server: the server to process requests for
- * @return: the number of clients processed
+ * @return: the number of clients processed, or -1 if an invalid command was detected
 */
 int libserver_server_process(struct LibserverServer *server);
 
