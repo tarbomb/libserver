@@ -17,6 +17,7 @@
  * as well as the central socket for the server.
 */
 struct LibserverServer {
+    int alive;
     struct LibsocketSocket socket;
     struct LibserverClientArray clients;
     struct LibserverCommandArray commands;
@@ -83,7 +84,14 @@ void libserver_server_init_clients(struct LibserverServer *server, size_t length
 struct LibserverCommand libserver_server_add_command(struct LibserverServer *server, const char *name,
                                                      void (*callback)(struct LibserverServer *server, int descriptor, const char *arguments));
 
-
+/*
+ * Adds a new client to a server's array of clients.
+ *
+ * @param server: the server to add the client to
+ * @param descriptor: the socket descriptor of the client
+ * @return: a copy of the client
+*/
+struct pollfd libserver_server_add_client(struct LibserverServer *server, int descriptor);
 
 
 

@@ -2,6 +2,7 @@
  * Implementations of server functions.
 */
 
+#include <poll.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <pthread.h>
@@ -15,6 +16,7 @@
 struct LibserverServer libserver_server_init(int port) {
     struct LibserverServer new_server = {0};
 
+    new_server.alive = 1;
     new_server.socket = libsocket_socket_init(port);
     libsocket_socket_bind(&new_server.socket, LIB_SERVER_SOCKET_QUEUE);
 
@@ -62,4 +64,12 @@ struct LibserverCommand libserver_server_add_command(struct LibserverServer *ser
     return new_command;
 }
 
+struct pollfd libserver_server_add_client(struct LibserverServer *server, int descriptor) {
+    struct pollfd new_client = {0};
+
+    new_client.fd = descriptor;
+    new_client.events = POLLRDNORM;
+
+    return new_client;
+}
 
