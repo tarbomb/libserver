@@ -7,7 +7,9 @@ a server program, and a collection of clients. It provides abstractions over soc
 to allow for non-blocking IPC between the clients and the server, and includes its own
 command registration system to bind prefixed commands like 'kill' to callbacks that
 are executed when the server reads them.
-</br>
+  
 libsocket tries to do as much on the stack as it possibly can, with the exception of
 a shared-memory mutex that comes with the library, which can be used for synchronizing
-sockets and process communication.
+sockets and process communication, which does not need to be used and only exists to
+make the programmer's job easier. Other than that, everything is entirely done on the
+stack.

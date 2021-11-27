@@ -20,7 +20,6 @@ int main(void) {
     libsocket_socket_set_data(&server.socket, &server);
     libserver_server_init_clients(&server, LIB_SERVER_MAXIMUM_CLIENTS, clients);
     libserver_server_init_commands(&server, LIB_SERVER_MAXIMUM_COMMANDS, commands);
-    libserver_server_init_mutex(&server, "./mutex");
 
     libserver_server_add_command(&server, "kill", kill_server);
 
