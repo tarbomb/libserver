@@ -11,6 +11,7 @@
 #define LIB_SERVER_SOCKET_QUEUE     10
 #define LIB_SERVER_MAXIMUM_CLIENTS  128
 #define LIB_SERVER_MAXIMUM_COMMANDS 64
+#define LIB_SERVER_POLL_TIMEOUT     500
 
 /*
  * The server structure. Contains an array of connected clients,
@@ -97,8 +98,11 @@ libserver_server_add_command(struct LibserverServer *server, const char *name, L
 struct pollfd libserver_server_add_client(struct LibserverServer *server, int descriptor);
 
 /*
- * Process any incoming inputs on connected sockets, and dispatching
- * commands
+ * Process any incoming inputs on connected sockets, and invoke
+ * any commands that the sockets request.
+ *
+ * @param server: the server to process requests for
+ * @return: the number of clients processed
 */
 int libserver_server_process(struct LibserverServer *server);
 

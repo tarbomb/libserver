@@ -4,6 +4,7 @@
 
 #include <poll.h>
 #include <stdio.h>
+#include <sys/poll.h>
 #include <unistd.h>
 #include <pthread.h>
 
@@ -74,5 +75,35 @@ struct pollfd libserver_server_add_client(struct LibserverServer *server, int de
 }
 
 int libserver_server_process(struct LibserverServer *server) {
+    int processed = 0;
+    unsigned int index = 0;
+    
+    /* No events */
+    if(poll(server->clients.contents, server->clients.logical_size, LIB_SERVER_POLL_TIMEOUT) <= 0) {
+        return 0;
+    }
 
+    /* Process input if it exists */
+    for(index = 0; index < server->clients.logical_size; index++) {
+        struct pollfd client = server->clients.contents[index];
+
+        if((client.revents & POLLRDNORM) == 0) {
+            continue;
+        }
+
+        processed++;
+    }
+
+
+    return processed;
 }
+
+
+
+
+
+
+
+
+
+

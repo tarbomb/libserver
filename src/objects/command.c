@@ -4,10 +4,16 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
 #include "command.h"
 
 void libserver_command_free(struct LibserverCommand value) {
     return;
+}
+
+int libserver_command_compare(struct LibserverCommand compare_a, struct LibserverCommand compare_b) {
+    return strcmp(compare_a.command, compare_b.command) == 0;
 }
 
 void libserver_command_array_append(struct LibserverCommandArray *array, struct LibserverCommand value) {
@@ -32,4 +38,18 @@ void libserver_command_array_free(struct LibserverCommandArray *array) {
    for(index = 0; index < array->logical_size; index++) {
        libserver_command_free(array->contents[index]);
    }
+}
+
+int libserver_command_array_find(struct LibserverCommandArray *array, struct LibserverCommand value) {
+    size_t index = 0;
+
+    for(index = 0; index < array->logical_size; index++) {
+        if(libserver_command_compare(array->contents[index], value) == 0) {
+            continue;
+        }
+
+        return index;
+    }
+
+    return -1;
 }
