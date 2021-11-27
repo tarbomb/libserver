@@ -4,9 +4,10 @@
 
 #include <poll.h>
 #include <stdio.h>
-#include <sys/poll.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <sys/poll.h>
+#include <sys/socket.h>
 
 #include "client.h"
 #include "server.h"
@@ -42,6 +43,7 @@ void libserver_server_free(struct LibserverServer *server, const char *mutex) {
     shmtools_destroy(shmtools_get_id(mutex, sizeof(pthread_mutex_t)));
 
     unlink(mutex);
+    shutdown(server->socket.fd, SHUT_RDWR);
     close(server->socket.fd);
 }
 

@@ -9,8 +9,6 @@ void new_client(struct LibsocketSocket *socket, int connector) {
 }
 
 void kill_server(struct LibserverServer *server, int sender, const char *message) {
-    printf("%s", "Killing server.\n");
-    printf("Message: %s", message);
     server->alive = 0;
 }
 
