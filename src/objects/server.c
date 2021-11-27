@@ -39,10 +39,9 @@ void libserver_server_free(struct LibserverServer *server, const char *mutex) {
     libserver_client_array_free(&server->clients);
     libserver_command_array_free(&server->commands);
 
-    shmtools_detach(server->mutex);
-    shmtools_destroy(shmtools_get_id(mutex, sizeof(pthread_mutex_t)));
-
     if(mutex != NULL) {
+        shmtools_detach(server->mutex);
+        shmtools_destroy(shmtools_get_id(mutex, sizeof(pthread_mutex_t)));
         unlink(mutex);
     }
 
