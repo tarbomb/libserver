@@ -8,17 +8,13 @@
 #include "../libsocket/libsocket.h"
 
 #define LIB_SERVER_MAXIMUM_CLIENTS  128
+#define LIB_SERVER_MAXIMUM_COMMANDS 64
+
+struct LibserverServer;
 
 /*
- * The server structure. Contains an array of connected clients,
- * as well as the central socket for the server.
+ * Represents a command that the server can execute.
 */
-struct LibserverServer {
-    struct LibsocketSocket socket;
-    struct LibserverClientArray clients;
-    pthread_mutex_t *mutex;
-};
-
 struct LibserverCommand {
     const char *command;
     void (*callback)(struct LibserverServer *server, const char *arguments);
@@ -31,6 +27,17 @@ struct LibserverCommandArray {
     unsigned int logical_size;
     unsigned int physical_size;
     struct LibserverCommand *contents;
+};
+
+/*
+ * The server structure. Contains an array of connected clients,
+ * as well as the central socket for the server.
+*/
+struct LibserverServer {
+    struct LibsocketSocket socket;
+    struct LibserverClientArray clients;
+    struct LibserverCommandArray commands;
+    pthread_mutex_t *mutex;
 };
 
 /*
@@ -61,5 +68,45 @@ void libserver_server_free(struct LibserverServer *server, const char *mutex);
  * @return: the new mutex
 */
 pthread_mutex_t *libserver_server_init_mutex(struct LibserverServer *server, const char *mutex);
+
+/*
+ * Releases a libserver command from memory.
+ *
+ * @param value: the value to release
+*/
+void libserver_command_free(struct LibserverCommand value);
+
+/*
+ * Appends a libserver command onto the array of commands
+ * that the server has.
+ *
+ * @param array: the array to append to
+ * @param value: the value to append
+*/
+void libserver_command_array_append(struct LibserverCommandArray *array, struct LibserverCommand value);
+
+/*
+ * Initialize a new command array with a maximum size SIZE, and
+ * a stack array.
+ *
+ * @param size: the maximum length of the array
+ * @param block: the stack array to use
+*/
+struct LibserverCommandArray libserver_command_array_init(unsigned int size, struct LibserverCommand *block);
+
+/*
+ * Releases a command array from memory.
+ *
+ * @param array: the array to release
+*/
+void libserver_command_array_free(struct LibserverCommandArray *array);
+
+
+
+
+
+
+
+
 
 #endif
