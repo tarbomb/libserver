@@ -1,46 +1,33 @@
 CC ?= cc
-PREFIX ?= /usr/local/lib
-HEADER_PREFIX = ?= /usr/local/include
-CFLAGS ?= -Wall -Wextra -lpthread -Wno-unused-function -g
-TESTS=$(patsubst %.c,%.out,$(wildcard tests/*.c))
-MEM_CHECKER ?=
+PREFIX ?=/usr/local/lib
+CFLAGS ?=
+OBJS=out/libsocket.o out/libfs.o out/shm-tools.o out/server.o out/client.o
 
-.PHONY: tests clean
+.PHONY: clean
 
-build: out/server.o out/client.o out/shm-tools.o $(TESTS)
+build: $(OBJS)
 
-all: out/server.o out/client.o out/shm-tools.o $(PREFIX)/libserver.so
-
-install: $(PREFIX)/libserver.so
-
-$(PREFIX)/libserver.so: out/*.o
-	$(CC) -shared -o $(PREFIX)/libserver.so out/*.o
-
-out/server.o: src/objects/server.c src/objects/server.h
+out/libsocket.o: src/libsocket/*
 	mkdir -p out/
-	$(CC) -c src/objects/server.c -o out/server.o -fpic $(CFLAGS)
+	$(CC) -c src/libsocket/libsocket.c -o out/libsocket.o $(CFLAGS)
 
-out/client.o: src/objects/client.c src/objects/client.h
+out/libfs.o: src/libfs/*
 	mkdir -p out/
-	$(CC) -c src/objects/client.c -o out/client.o -fpic $(CFLAGS)
+	$(CC) -c src/libfs/libfs.c -o out/libfs.o $(CFLAGS)
 
-out/shm-tools.o: src/shm-tools/shm-tools.c src/shm-tools/shm-tools.h
+out/shm-tools.o: src/shm-tools/*
 	mkdir -p out/
-	$(CC) -c src/shm-tools/shm-tools.c -o out/shm-tools.o -fpic $(CFLAGS)
+	$(CC) -c src/shm-tools/shm-tools.c -o out/shm-tools.o $(CFLAGS)
 
-out/libfs.o: src/libfs/libfs.c src/libfs/libfs.h
+out/server.o: src/objects/server.*
 	mkdir -p out/
-	$(CC) -c src/libfs/libfs.c -o out/libfs.o -fpic $(CFLAGS)
+	$(CC) -c src/objects/server.c -o out/server.o $(CFLAGS)
 
-tests/%.out: tests/%.c out/server.o out/client.o out/shm-tools.o out/libfs.o
-	$(CC) $< out/shm-tools.o out/server.o out/client.o -o $@ $(CFLAGS)
+out/client.o: src/objects/client.*
+	mkdir -p out/
+	$(CC) -c src/objects/client.c -o out/client.o $(CFLAGS)
 
-tests: $(TESTS)
-	for test_file in tests/*.out; do 				\
-		 $(MEM_CHECKER) ./$$test_file;				\
-		 printf "Test '%s' finished\n" $$test_file;	\
-	done
+
 
 clean:
-	rm tests/*.out
-	rm -r out/
+	rm -f `find . -type f -name '*.o'`

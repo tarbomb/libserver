@@ -1,27 +1,22 @@
 /*
- * Implementations of the client array and client-related functions.
+ * Implementations of the client array and methods.
 */
 
+#include <poll.h>
 #include <unistd.h>
+
+#define CT_ARRAY_STACK_ONLY
 
 #include "client.h"
 #include "structures/array.h"
 
-void libserver_client_free(struct LibServerClient client) {
-    close(client.from_client);
+/* Client array operations */
+ct_array_define_append(LibserverClientArray, struct pollfd, libserver_client)
 
-    return;
+ct_array_define_init(LibserverClientArray, struct pollfd, libserver_client)
+
+ct_array_define_free(LibserverClientArray, libserver_client, libserver_client_free)
+
+void libserver_client_free(struct pollfd value) {
+    close(value.fd);
 }
-
-int libserver_client_compare(struct LibServerClient compare_a, struct LibServerClient compare_b) {
-    return compare_a.process_id == compare_b.process_id;
-}
-
-/* Macro generated functions */
-ct_array_define_init(LibServerClientArray, struct LibServerClient, libserver_client)
-
-ct_array_define_free(LibServerClientArray, libserver_client, libserver_client_free)
-
-ct_array_define_append(LibServerClientArray, struct LibServerClient, libserver_client)
-
-ct_array_define_remove(LibServerClientArray, struct LibServerClient, libserver_client, libserver_client_compare, libserver_client_free)
