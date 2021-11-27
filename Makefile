@@ -2,8 +2,10 @@ CC ?= cc
 PREFIX ?=/usr/local/lib
 CFLAGS ?=
 OBJS=out/libsocket.o out/libfs.o out/shm-tools.o out/server.o out/client.o
+TESTS=$(patsubst %.c,%.out,$(wildcard tests/*.c))
+DEBUGGER ?=
 
-.PHONY: clean
+.PHONY: clean check
 
 build: $(OBJS)
 
@@ -27,7 +29,12 @@ out/client.o: src/objects/client.*
 	mkdir -p out/
 	$(CC) -c src/objects/client.c -o out/client.o $(CFLAGS)
 
+%.out: %.c $(OBJS) 
+	$(CC) $< out/*.o -o $@
 
+check: $(TESTS)
+	@for test_file in tests/*.out; do $(DEBUGGER) ./$$test_file; done
 
 clean:
-	rm -f `find . -type f -name '*.o'`
+	rm -rf out/*.o
+	rm -f tests/*.out
