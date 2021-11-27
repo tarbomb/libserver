@@ -87,6 +87,8 @@ size_t libserver_server_extract_command(const char *command, size_t length, char
         written++;
     }
 
+    buffer[index] = '\0';
+
     return written;
 }
 
@@ -110,8 +112,9 @@ int libserver_server_process(struct LibserverServer *server) {
             continue;
         }
 
-        /* Extract the base */
+        /* Read message and extract command to perform dispatchment */
         read(client.fd, client_message, LIB_SERVER_READ_BUFFER);
+        libserver_server_extract_command(client_message, LIB_SERVER_COMMAND_BUFFER, client_command);
 
         processed++;
     }
