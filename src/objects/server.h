@@ -119,10 +119,11 @@ size_t libserver_server_extract_command(const char *command, size_t length, char
  *
  * @param server: the server to search through
  * @param sender: the file descriptor of the socket that sent the command
+ * @param message: the full message sent by the client
  * @param command: the name of the command
  * @return: 1 if a command was found, 0 if it was not
 */
-int libserver_server_dispatch(struct LibserverServer *server, int sender, const char *command);
+int libserver_server_dispatch(struct LibserverServer *server, int sender, const char *message, const char *command);
 
 /*
  * Process any incoming inputs on connected sockets, and invoke

@@ -48,7 +48,6 @@ int libserver_command_array_find(struct LibserverCommandArray *array, struct Lib
             continue;
         }
 
-        printf("'%s' & '%s' are the same\n", array->contents[index].command, value.command);
         return index;
     }
 

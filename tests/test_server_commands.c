@@ -30,15 +30,15 @@ int main(void) {
     assert(new_server.commands.logical_size == 1);
     assert(new_server.commands.contents[new_server.commands.logical_size - 1].callback == ping_command);
     assert(strcmp(new_server.commands.contents[new_server.commands.logical_size - 1].command, "ping") == 0);
-    assert(libserver_server_dispatch(&new_server, 0, "ping") == 1);
+    assert(libserver_server_dispatch(&new_server, 0, "ping 123", "ping") == 1);
 
     libserver_server_add_command(&new_server, "pong", pong_command);
     assert(new_server.commands.logical_size == 2);
     assert(new_server.commands.contents[new_server.commands.logical_size - 1].callback == pong_command);
     assert(strcmp(new_server.commands.contents[new_server.commands.logical_size - 1].command, "pong") == 0);
-    assert(libserver_server_dispatch(&new_server, 0, "pong") == 1);
+    assert(libserver_server_dispatch(&new_server, 0, "pong 123", "pong") == 1);
 
-    assert(libserver_server_dispatch(&new_server, 0, "thud") == 0);
+    assert(libserver_server_dispatch(&new_server, 0, "pong 123", "thud") == 0);
 
     /* Release the server and mutex */
     libserver_server_free(&new_server, "./mutex");

@@ -10,6 +10,7 @@ void new_client(struct LibsocketSocket *socket, int connector) {
 
 void kill_server(struct LibserverServer *server, int sender, const char *command) {
     printf("%s", "Killing server.\n");
+    printf("Command: %s", command);
     server->alive = 0;
 }
 
@@ -28,6 +29,7 @@ int main(void) {
     /* Handle requests */
     while(server.alive == 1) {
         libsocket_socket_accept(&server.socket, 500, new_client);
+        libserver_server_process(&server);
     }
 
     libserver_server_free(&server, "./mutex");
