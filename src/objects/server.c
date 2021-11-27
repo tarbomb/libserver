@@ -12,11 +12,10 @@
 #include "../libsocket/libsocket.h"
 #include "../shm-tools/shm-tools.h"
 
-struct LibserverServer libserver_server_init(int port, size_t length, struct pollfd clients[]) {
+struct LibserverServer libserver_server_init(int port) {
     struct LibserverServer new_server = {0};
 
     new_server.socket = libsocket_socket_init(port);
-    new_server.clients = libserver_client_array_init(length, clients);
 
     return new_server;
 }
@@ -46,6 +45,10 @@ void libserver_server_init_commands(struct LibserverServer *server, size_t lengt
     server->commands = libserver_command_array_init(length, commands);
 }
 
+void libserver_server_init_clients(struct LibserverServer *server, size_t length, struct pollfd clients[]) {
+    server->clients = libserver_client_array_init(length, clients);
+}
+
 struct LibserverCommand libserver_server_add_command(struct LibserverServer *server, const char *name,
                                                      void (*callback)(struct LibserverServer *server, int descriptor, const char *arguments)) {
     struct LibserverCommand new_command = {0};
@@ -57,3 +60,5 @@ struct LibserverCommand libserver_server_add_command(struct LibserverServer *ser
 
     return new_command;
 }
+
+

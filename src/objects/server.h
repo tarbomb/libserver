@@ -26,11 +26,9 @@ struct LibserverServer {
  * Initialize a new server structure on the stack.
  *
  * @param port: the port of the server
- * @param length: maximum length of the array
- * @param clients: pointer to an array of clients
  * @return: a new server
 */
-struct LibserverServer libserver_server_init(int port, size_t length, struct pollfd clients[]);
+struct LibserverServer libserver_server_init(int port);
 
 /*
  * Releases a server, and all of its clients from memory. Also removes
@@ -61,6 +59,17 @@ pthread_mutex_t *libserver_server_init_mutex(struct LibserverServer *server, con
  * @param commands: the stack array to store in
 */
 void libserver_server_init_commands(struct LibserverServer *server, size_t length, struct LibserverCommand commands[]);
+
+/*
+ * Initializes a new array of clients within the server
+ * with a maximum length LENGTH, and with a stack array
+ * CLIENTS.
+ *
+ * @param server: the server to initialize clients into
+ * @param length: the maximum length of the array
+ * @param clients: the stack array to store in
+*/
+void libserver_server_init_clients(struct LibserverServer *server, size_t length, struct pollfd clients[]);
 
 /*
  * Registers a new command into the server that will be invoked when
