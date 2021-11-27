@@ -3,6 +3,10 @@
 #include "../src/objects/server.h"
 
 void new_client(struct LibsocketSocket *socket, int connector) {
+    struct LibserverServer *server = (struct LibserverServer *) socket->metadata;
+
+    libserver_server_add_client(server, connector);
+    printf("Added new client!\n");
 }
 
 int main(void) {
@@ -17,7 +21,7 @@ int main(void) {
 
     /* Handle requests */
     while(server.alive == 1) {
-        sleep(1);
+        libsocket_socket_accept(&server.socket, 500, new_client);
     }
 
     libserver_server_free(&server, "./mutex");
