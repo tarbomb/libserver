@@ -29,7 +29,7 @@ int main(void) {
         libserver_server_process(&server);
     }
 
-    libserver_server_free(&server, "./mutex");
+    libserver_server_free(&server, NULL);
 
     return EXIT_SUCCESS;
 }
