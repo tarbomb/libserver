@@ -8,10 +8,12 @@
 #include "command.h"
 #include "../libsocket/libsocket.h"
 
+#define LIB_SERVER_READ_BUFFER      4096
 #define LIB_SERVER_SOCKET_QUEUE     10
+#define LIB_SERVER_POLL_TIMEOUT     500
+#define LIB_SERVER_COMMAND_BUFFER   248
 #define LIB_SERVER_MAXIMUM_CLIENTS  128
 #define LIB_SERVER_MAXIMUM_COMMANDS 64
-#define LIB_SERVER_POLL_TIMEOUT     500
 
 /*
  * The server structure. Contains an array of connected clients,
@@ -98,6 +100,18 @@ libserver_server_add_command(struct LibserverServer *server, const char *name, L
 struct pollfd libserver_server_add_client(struct LibserverServer *server, int descriptor);
 
 /*
+ * Extracts the command from the start of the message, and writes
+ * it to a buffer BUFFER of length LENGTH. The delimiter for the
+ * command is ' ' by default.
+ *
+ * @param command: the command to extract from
+ * @param length: the length of the buffer
+ * @param buffer: the buffer to write the command to
+ * @return: number of bytes written
+*/
+size_t libserver_server_extract_command(const char *command, size_t length, char buffer[]);
+
+/*
  * Process any incoming inputs on connected sockets, and invoke
  * any commands that the sockets request.
  *
@@ -105,9 +119,5 @@ struct pollfd libserver_server_add_client(struct LibserverServer *server, int de
  * @return: the number of clients processed
 */
 int libserver_server_process(struct LibserverServer *server);
-
-
-
-
 
 #endif

@@ -74,9 +74,15 @@ struct pollfd libserver_server_add_client(struct LibserverServer *server, int de
     return new_client;
 }
 
+size_t libserver_server_extract_command(const char *command, size_t length, char buffer[]) {
+
+}
+
 int libserver_server_process(struct LibserverServer *server) {
     int processed = 0;
     unsigned int index = 0;
+    char client_message[LIB_SERVER_READ_BUFFER] = {0};
+    char client_command[LIB_SERVER_COMMAND_BUFFER] = {0};
     
     /* No events */
     if(poll(server->clients.contents, server->clients.logical_size, LIB_SERVER_POLL_TIMEOUT) <= 0) {
