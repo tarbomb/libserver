@@ -8,6 +8,7 @@
 
 #include "client.h"
 #include "server.h"
+#include "command.h"
 #include "../libsocket/libsocket.h"
 #include "../shm-tools/shm-tools.h"
 
