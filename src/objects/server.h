@@ -15,6 +15,8 @@
 #define LIB_SERVER_MAXIMUM_CLIENTS  128
 #define LIB_SERVER_MAXIMUM_COMMANDS 64
 
+#define LIB_SERVER_COMMAND_DELIMITER ' '
+
 /*
  * The server structure. Contains an array of connected clients,
  * as well as the central socket for the server.

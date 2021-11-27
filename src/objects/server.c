@@ -75,7 +75,19 @@ struct pollfd libserver_server_add_client(struct LibserverServer *server, int de
 }
 
 size_t libserver_server_extract_command(const char *command, size_t length, char buffer[]) {
+    size_t written = 0;
+    size_t index = 0;
 
+    for(index = 0; index < length && command[index] != '\0'; index++) {
+        if(command[index] == LIB_SERVER_COMMAND_DELIMITER) {
+            break;
+        }        
+
+        buffer[index] = command[index];
+        written++;
+    }
+
+    return written;
 }
 
 int libserver_server_process(struct LibserverServer *server) {
@@ -93,9 +105,13 @@ int libserver_server_process(struct LibserverServer *server) {
     for(index = 0; index < server->clients.logical_size; index++) {
         struct pollfd client = server->clients.contents[index];
 
+        /* Not the event we are looking for */
         if((client.revents & POLLRDNORM) == 0) {
             continue;
         }
+
+        /* Extract the base */
+        read(client.fd, client_message, LIB_SERVER_READ_BUFFER);
 
         processed++;
     }
