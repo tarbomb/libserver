@@ -13,6 +13,7 @@
 #define LIB_SERVER_POLL_TIMEOUT     500
 #define LIB_SERVER_COMMAND_BUFFER   248
 #define LIB_SERVER_MAXIMUM_CLIENTS  128
+#define LIB_SERVER_RESPONSE_BUFFER  4096
 #define LIB_SERVER_MAXIMUM_COMMANDS 64
 
 #define LIB_SERVER_COMMAND_DELIMITER ' '
@@ -133,5 +134,15 @@ int libserver_server_dispatch(struct LibserverServer *server, int sender, const 
  * @return: the number of clients processed, or -1 if an invalid command was detected
 */
 int libserver_server_process(struct LibserverServer *server);
+
+/*
+ * Writes formatted data onto a socket. Maximum message size of
+ * LIB_SERVER_RESPONSE_BUFFER.
+ *
+ * @param descriptor: the file descriptor of the socket to write to
+ * @param format: the format string
+ * @return: number of bytes written
+*/
+size_t libserver_server_respond(int descriptor, const char *format, ...);
 
 #endif

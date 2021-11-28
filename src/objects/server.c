@@ -145,3 +145,14 @@ int libserver_server_process(struct LibserverServer *server) {
 
     return processed;
 }
+
+size_t libserver_server_respond(int descriptor, const char *format, ...) {
+    size_t written = 0;
+    va_list specifiers = {0};
+    char response[LIB_SERVER_RESPONSE_BUFFER] = {0};
+
+    vsprintf(response, format, specifiers);
+    written = write(descriptor, response, written);
+
+    return written;
+}
