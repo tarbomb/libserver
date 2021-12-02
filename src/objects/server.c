@@ -54,8 +54,7 @@ void libserver_server_init_clients(struct LibserverServer *server, size_t length
     server->clients = libserver_client_array_init(length, clients);
 }
 
-struct LibserverCommand
-libserver_server_add_command(struct LibserverServer *server, const char *name, LibseverCallback callback) {
+struct LibserverCommand libserver_server_add_command(struct LibserverServer *server, const char *name, LibseverCallback callback) {
     struct LibserverCommand new_command = {0};
 
     new_command.callback = callback;
