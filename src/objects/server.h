@@ -148,11 +148,11 @@ int libserver_server_process(struct LibserverServer *server);
 size_t libserver_server_respond(int descriptor, const char *format, ...);
 
 /*
- * Flushes any disconnected clients from the client array.
+ * Flushes any disconnected clients from the server's client array.
  *
- * @param array: the array to flush
+ * @param server: the server to flush
  * @return: number of clients flushed
 */
-unsigned int libserver_server_flush(struct LibserverClientArray *array);
+unsigned int libserver_server_flush(struct LibserverServer *server);
 
 #endif

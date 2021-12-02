@@ -163,3 +163,29 @@ size_t libserver_server_respond(int descriptor, const char *format, ...) {
 
     return written;
 }
+
+unsigned int libserver_server_flush(struct LibserverServer *server) {
+    size_t index = 0;
+    size_t cursor = 0;
+    unsigned int flushed = 0;
+
+    for(index = 0; index < server->clients.logical_size; index++) {
+        struct pollfd client = server->clients.contents[index];
+        struct pollfd no_client = {0};
+
+        no_client.fd = -1;
+
+        if(client.fd == -1) {
+            continue;
+        }
+
+        server->clients.contents[index] = no_client;
+        server->clients.contents[cursor] = client;
+        cursor++;
+        flushed++;
+    }
+
+    server->clients.logical_size -= flushed;
+
+    return flushed;
+}
