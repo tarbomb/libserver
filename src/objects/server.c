@@ -134,7 +134,7 @@ int libserver_server_process(struct LibserverServer *server) {
          * disconnected if there is no text to read. */
         if(read(client.fd, client_message, LIB_SERVER_READ_BUFFER) == 0) {
             close(client.fd);
-            client.fd = -1;
+            server->clients.contents[index].fd = -1;
             processed++;
 
             continue;
@@ -171,18 +171,14 @@ unsigned int libserver_server_flush(struct LibserverServer *server) {
 
     for(index = 0; index < server->clients.logical_size; index++) {
         struct pollfd client = server->clients.contents[index];
-        struct pollfd no_client = {0};
-
-        no_client.fd = -1;
 
         if(client.fd == -1) {
+            flushed++;
             continue;
         }
 
-        server->clients.contents[index] = no_client;
         server->clients.contents[cursor] = client;
         cursor++;
-        flushed++;
     }
 
     server->clients.logical_size -= flushed;

@@ -5,6 +5,8 @@
 void new_client(struct LibsocketSocket *socket, int connector) {
     struct LibserverServer *server = (struct LibserverServer *) socket->metadata;
 
+    printf("Added new client, %i.\n", connector);
+
     libserver_server_add_client(server, connector);
 }
 
@@ -27,6 +29,7 @@ int main(void) {
     while(server.alive == 1) {
         libsocket_socket_accept(&server.socket, 500, new_client);
         libserver_server_process(&server);
+        libserver_server_flush(&server);
     }
 
     libserver_server_free(&server, NULL);
