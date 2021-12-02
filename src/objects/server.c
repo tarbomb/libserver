@@ -130,8 +130,16 @@ int libserver_server_process(struct LibserverServer *server) {
             continue;
         }
 
-        /* Read message and extract command to perform dispatchment */
-        read(client.fd, client_message, LIB_SERVER_READ_BUFFER);
+        /* Read message, extract command to perform dispatchment, and mark as
+         * disconnected if there is no text to read. */
+        if(read(client.fd, client_message, LIB_SERVER_READ_BUFFER) == 0) {
+            close(client.fd);
+            client.fd = -1;
+            processed++;
+
+            continue;
+        }
+
         libserver_server_extract_command(client_message, LIB_SERVER_COMMAND_BUFFER, client_command);
 
         /* Execute the command, or handle an error */

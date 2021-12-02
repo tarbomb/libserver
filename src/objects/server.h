@@ -128,7 +128,9 @@ int libserver_server_dispatch(struct LibserverServer *server, int sender, const 
 
 /*
  * Process any incoming inputs on connected sockets, and invoke
- * any commands that the sockets request.
+ * any commands that the sockets request. Marks any sockets that
+ * have been disconnected, which should be cleared by using the
+ * libserver_server_flush function.
  *
  * @param server: the server to process requests for
  * @return: the number of clients processed, or -1 if an invalid command was detected
@@ -144,5 +146,13 @@ int libserver_server_process(struct LibserverServer *server);
  * @return: number of bytes written
 */
 size_t libserver_server_respond(int descriptor, const char *format, ...);
+
+/*
+ * Flushes any disconnected clients from the client array.
+ *
+ * @param array: the array to flush
+ * @return: number of clients flushed
+*/
+unsigned int libserver_server_flush(struct LibserverClientArray *array);
 
 #endif
