@@ -8,6 +8,7 @@ rm -rf "$root/$library"
 # Make a directory for the compressed library
 mkdir --parents "$root/$library"
 
+
 # Extract the source code of each used function
 cat `find "$root/src" -type f -name '*.c'` | csource strip-comments | grep -v ^# | sed 's/^\s\{2,\}//g' | grep -v ^$ | tr --delete '\n' | csource separate > "$root/$library/source_functions.c"
 
@@ -17,7 +18,9 @@ for function_name in `cat src/objects/*.c | csource strip-comments | grep -v '^#
 done
 
 # Filter out duplicate dependencies
-cat "$root/$library/dependencies.c" | awk '{ print length " " $0 }' | sort -n | cut -d' ' -f 2- | uniq > "$root/$library/dependencies.c"
+cat "$root/$library/dependencies.c" | awk '{ print length " " $0 }' | sort -n | cut -d' ' -f 2- | uniq > "$root/$library/new_dependencies.c"
+rm "$root/$library/dependencies.c"
+mv "$root/$library/new_dependencies.c" "$root/$library/dependencies.c"
 
 echo -n '#include' >> "$root/$library/libserver.c"
 echo \"libserver.h\" >> "$root/$library/libserver.c"
@@ -28,7 +31,9 @@ for function_name in `cat "$root/$library/dependencies.c"`; do
 done
 
 # Filter out duplicate dependency code
-cat "$root/$library/libserver.c" | sort -n | cut -d' ' -f 1- | uniq | cut -d' ' -f 2- > "$root/$library/libserver.c"
+cat "$root/$library/libserver.c" | sort -n | cut -d' ' -f 1- | uniq | cut -d' ' -f 2- > "$root/$library/new_libserver.c"
+rm "$root/$library/libserver.c"
+mv "$root/$library/new_libserver.c" "$root/$library/libserver.c"
 
 # Create header file
 cat << EOF > "$root/$library/$library.h"

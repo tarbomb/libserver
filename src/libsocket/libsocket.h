@@ -15,6 +15,8 @@ struct LibsocketSocket {
     struct sockaddr_in address;
 };
 
+typedef void (*LibsocketAcceptCallback)(struct LibsocketSocket *socket_container, int connector);
+
 /*
  * Initializes a new socket on an address and port. This can
  * be treated as both a server, or client.
@@ -55,10 +57,10 @@ void libsocket_socket_set_data(struct LibsocketSocket *socket_container, void *m
  *
  * @param socket_container: the socket to poll
  * @param timeout: the timeout to poll for
- * @param on_accept: the callback invoked after an acception
+ * @param callback: the callback invoked after an acception
  * @return: the descriptor of the new connection, or -1 if there was none
 */
-int libsocket_socket_accept(struct LibsocketSocket *socket_container, int timeout, void (*on_accept)(struct LibsocketSocket *socket_container, int connector));
+int libsocket_socket_accept(struct LibsocketSocket *socket_container, int timeout, LibsocketAcceptCallback callback);
 
 /*
  * Polls the socket file descriptor, and dertermines if
