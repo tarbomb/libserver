@@ -8,8 +8,8 @@
 
 #include "command.h"
 
-void libserver_command_free(struct LibserverCommand value) {
-    return;
+struct LibserverCommand libserver_command_free(struct LibserverCommand value) {
+    return value;
 }
 
 int libserver_command_compare(struct LibserverCommand compare_a, struct LibserverCommand compare_b) {
@@ -27,7 +27,11 @@ void libserver_command_array_append(struct LibserverCommandArray *array, struct 
 }
 
 struct LibserverCommandArray libserver_command_array_init(unsigned int size, struct LibserverCommand *block) {
-   struct LibserverCommandArray new_array = {0, size, block};
+   struct LibserverCommandArray new_array = {0};
+
+   new_array.logical_size = 0;
+   new_array.physical_size = size;
+   new_array.contents = block;
 
    return new_array;
 }

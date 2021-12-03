@@ -21,7 +21,11 @@ void libserver_client_array_append(struct LibserverClientArray *array, struct po
 }
 
 struct LibserverClientArray libserver_client_array_init(unsigned int size, struct pollfd *block) {
-   struct LibserverClientArray new_array = {0, size, block};
+   struct LibserverClientArray new_array = {0};
+
+   new_array.logical_size = 0;
+   new_array.physical_size = size;
+   new_array.contents = block;
 
    return new_array;
 }

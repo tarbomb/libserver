@@ -25,8 +25,9 @@ struct LibserverCommandArray {
  * Releases a libserver command from memory.
  *
  * @param value: the value to release
+ * @return: an unmodified structure
 */
-void libserver_command_free(struct LibserverCommand value);
+struct LibserverCommand libserver_command_free(struct LibserverCommand value);
 
 /*
  * Compares two commands by their names.

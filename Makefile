@@ -1,6 +1,6 @@
 CC ?= cc
 PREFIX ?=/usr/local/lib
-CFLAGS ?= -ansi -g
+CFLAGS ?= -ansi -Wall -Wextra -pedantic -Wshadow -Wdouble-promotion -g
 OBJS=out/libsocket.o out/shm-tools.o out/server.o out/client.o out/command.o
 TESTS=$(patsubst %.c,%.out,$(wildcard tests/*.c))
 DEBUGGER ?=
