@@ -61,7 +61,7 @@ int libsocket_socket_accept(struct LibsocketSocket *socket_container, int timeou
     int connection_fd = 0;
     struct pollfd descriptor = {0};
 
-    descriptor.events = POLLRDNORM;
+    descriptor.events = POLLIN;
     descriptor.fd = socket_container->fd;
 
     /* No events */
@@ -70,12 +70,10 @@ int libsocket_socket_accept(struct LibsocketSocket *socket_container, int timeou
     }
 
     /* Incorrect event */
-    if((descriptor.revents & POLLRDNORM) == 0) {
+    if((descriptor.revents & POLLIN) == 0) {
         return -1;
     }
 
-
-    
     connection_fd = accept(socket_container->fd, NULL, NULL);
 
     if(callback != NULL) {

@@ -2,14 +2,8 @@
 A small C library for handling 'servers.'
 
 # Description
-As stated above, libserver is a C library for creating server-like interfaces between
-a server program, and a collection of clients. It provides abstractions over sockets
-to allow for non-blocking IPC between the clients and the server, and includes its own
-command registration system to bind prefixed commands like 'kill' to callbacks that
-are executed when the server reads them.
-  
-libsocket tries to do as much on the stack as it possibly can, with the exception of
-a shared-memory mutex that comes with the library, which can be used for synchronizing
-sockets and process communication, which does not need to be used and only exists to
-make the programmer's job easier. Other than that, everything is entirely done on the
-stack.
+libserver is a C library for creating socket servers and clients easily, with the intended
+purpose of being used for local code such as daemons. It uses the BSD socket interfaces, which
+is widly portable to \*NIX and UNIX-like operating systems, with the major exception being Windows.
+
+libserver is designed to be entirely singled threaded, with ANSI C compliance in mind.

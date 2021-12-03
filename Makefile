@@ -1,7 +1,7 @@
 CC ?= cc
 PREFIX ?=/usr/local/lib
-CFLAGS ?= -g
-OBJS=out/libsocket.o out/libfs.o out/shm-tools.o out/server.o out/client.o out/command.o
+CFLAGS ?= -ansi -g
+OBJS=out/libsocket.o out/shm-tools.o out/server.o out/client.o out/command.o
 TESTS=$(patsubst %.c,%.out,$(wildcard tests/*.c))
 DEBUGGER ?=
 
@@ -12,10 +12,6 @@ build: $(OBJS)
 out/libsocket.o: src/libsocket/*
 	mkdir -p out/
 	$(CC) -c src/libsocket/libsocket.c -o out/libsocket.o $(CFLAGS)
-
-out/libfs.o: src/libfs/*
-	mkdir -p out/
-	$(CC) -c src/libfs/libfs.c -o out/libfs.o $(CFLAGS)
 
 out/shm-tools.o: src/shm-tools/*
 	mkdir -p out/
