@@ -26,6 +26,7 @@ struct LibserverServer libserver_server_init(int port) {
     return new_server;
 }
 
+#if LIB_SERVER_ENABLE_MUTEX == 1
 pthread_mutex_t *libserver_server_init_mutex(struct LibserverServer *server, const char *mutex) {
     pthread_mutex_t *new_mutex = NULL;
     int mutex_key = shmtools_get_id_create(mutex, sizeof(pthread_mutex_t));
@@ -35,7 +36,9 @@ pthread_mutex_t *libserver_server_init_mutex(struct LibserverServer *server, con
 
     return new_mutex;
 }
+#endif
 
+#if LIB_SERVER_ENABLE_MUTEX == 1
 void libserver_server_free(struct LibserverServer *server, const char *mutex) {
     if(mutex != NULL) {
         shmtools_detach(server->mutex);
@@ -46,6 +49,12 @@ void libserver_server_free(struct LibserverServer *server, const char *mutex) {
     shutdown(server->socket.fd, SHUT_RDWR);
     close(server->socket.fd);
 }
+#else
+void libserver_server_free(struct LibserverServer *server) {
+    shutdown(server->socket.fd, SHUT_RDWR);
+    close(server->socket.fd);
+}
+#endif
 
 void libserver_server_init_commands(struct LibserverServer *server, size_t length, struct LibserverCommand commands[]) {
     server->commands = libserver_command_array_init(length, commands);
@@ -133,7 +142,7 @@ int libserver_server_process(struct LibserverServer *server) {
 
         /* Read message, extract command to perform dispatchment, and mark as
          * disconnected if there is no text to read. */
-        if(read(client.fd, client_message, LIB_SERVER_READ_BUFFER) == 0) {
+        if(read(client.fd, client_message, LIB_SERVER_READ_BUFFER - 1) == 0) {
             close(client.fd);
             server->clients.contents[index].fd = -1;
             processed++;
@@ -141,7 +150,7 @@ int libserver_server_process(struct LibserverServer *server) {
             continue;
         }
 
-        libserver_server_extract_command(client_message, LIB_SERVER_COMMAND_BUFFER, client_command);
+        libserver_server_extract_command(client_message, LIB_SERVER_COMMAND_BUFFER - 1, client_command);
 
         /* Execute the command, or handle an error */
         if(libserver_server_dispatch(server, client.fd, client_message, client_command) == 0) {

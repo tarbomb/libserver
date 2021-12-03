@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <unistd.h>
+
 #include "../src/objects/server.h"
 
 void new_client(struct LibsocketSocket *socket, int connector) {
@@ -32,7 +33,7 @@ int main(void) {
         libserver_server_flush(&server);
     }
 
-    libserver_server_free(&server, NULL);
+    libserver_server_free(&server);
 
     return EXIT_SUCCESS;
 }

@@ -8,15 +8,17 @@
 #include "command.h"
 #include "../libsocket/libsocket.h"
 
-#define LIB_SERVER_READ_BUFFER      4096
-#define LIB_SERVER_SOCKET_QUEUE     10
-#define LIB_SERVER_POLL_TIMEOUT     500
-#define LIB_SERVER_COMMAND_BUFFER   248
-#define LIB_SERVER_MAXIMUM_CLIENTS  128
-#define LIB_SERVER_RESPONSE_BUFFER  4096
-#define LIB_SERVER_MAXIMUM_COMMANDS 64
+#define LIB_SERVER_READ_BUFFER      4096 + 1
+#define LIB_SERVER_SOCKET_QUEUE     10 + 1
+#define LIB_SERVER_POLL_TIMEOUT     500 + 1
+#define LIB_SERVER_COMMAND_BUFFER   248 + 1
+#define LIB_SERVER_MAXIMUM_CLIENTS  128 + 1
+#define LIB_SERVER_RESPONSE_BUFFER  4096 + 1
+#define LIB_SERVER_MAXIMUM_COMMANDS 64 + 1
 
 #define LIB_SERVER_COMMAND_DELIMITER ' '
+
+#define LIB_SERVER_ENABLE_MUTEX 0
 
 /*
  * The server structure. Contains an array of connected clients,
@@ -27,7 +29,9 @@ struct LibserverServer {
     struct LibsocketSocket socket;
     struct LibserverClientArray clients;
     struct LibserverCommandArray commands;
+#if LIB_SERVER_ENABLE_MUTEX == 1
     pthread_mutex_t *mutex;
+#endif
 };
 
 /*
@@ -38,6 +42,7 @@ struct LibserverServer {
 */
 struct LibserverServer libserver_server_init(int port);
 
+#if LIB_SERVER_ENABLE_MUTEX == 1
 /*
  * Releases a server, and all of its clients from memory. Also removes
  * and detaches the shared memory mutex.
@@ -46,7 +51,16 @@ struct LibserverServer libserver_server_init(int port);
  * @param mutex: location of the server's mutex
 */
 void libserver_server_free(struct LibserverServer *server, const char *mutex);
+#else
+/*
+ * Releases a server, and all of its clients from memory.
+ *
+ * @param server: the server to release
+*/
+void libserver_server_free(struct LibserverServer *server);
+#endif
 
+#if LIB_SERVER_ENABLE_MUTEX == 1
 /*
  * Initializes a new shared-memory mutex into a server, using the file at
  * the path FILE. The file is created if it does not exist.
@@ -56,6 +70,7 @@ void libserver_server_free(struct LibserverServer *server, const char *mutex);
  * @return: the new mutex
 */
 pthread_mutex_t *libserver_server_init_mutex(struct LibserverServer *server, const char *mutex);
+#endif
 
 /*
  * Initializes a new array of commands within the server
