@@ -4,6 +4,7 @@
 
 #include <poll.h>
 #include <stdio.h>
+#include <stdarg.h>
 #include <unistd.h>
 #include <pthread.h>
 #include <sys/poll.h>
@@ -69,7 +70,7 @@ struct pollfd libserver_server_add_client(struct LibserverServer *server, int de
     struct pollfd new_client = {0};
 
     new_client.fd = descriptor;
-    new_client.events = POLLRDNORM;
+    new_client.events = POLLIN;
 
     libserver_client_array_append(&server->clients, new_client);
 
@@ -126,7 +127,7 @@ int libserver_server_process(struct LibserverServer *server) {
         struct pollfd client = server->clients.contents[index];
 
         /* Not the event we are looking for */
-        if((client.revents & POLLRDNORM) == 0) {
+        if((client.revents & POLLIN) == 0) {
             continue;
         }
 

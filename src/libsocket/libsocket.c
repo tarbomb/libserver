@@ -74,6 +74,8 @@ int libsocket_socket_accept(struct LibsocketSocket *socket_container, int timeou
         return -1;
     }
 
+
+    
     connection_fd = accept(socket_container->fd, NULL, NULL);
 
     if(callback != NULL) {
