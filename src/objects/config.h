@@ -1,0 +1,19 @@
+/*
+ * Constants to tune the behavior of libserver.
+*/
+
+#ifndef LIB_SERVER_CONFIG_H
+
+#define LIB_SERVER_READ_BUFFER      4096 + 1
+#define LIB_SERVER_SOCKET_QUEUE     10 + 1
+#define LIB_SERVER_POLL_TIMEOUT     500 + 1
+#define LIB_SERVER_COMMAND_BUFFER   248 + 1
+#define LIB_SERVER_MAXIMUM_CLIENTS  128 + 1
+#define LIB_SERVER_RESPONSE_BUFFER  4096 + 1
+#define LIB_SERVER_MAXIMUM_COMMANDS 64 + 1
+
+#define LIB_SERVER_COMMAND_DELIMITER ' '
+
+#define LIB_SERVER_ENABLE_MUTEX 0
+
+#endif

@@ -10,6 +10,7 @@
 #include <sys/poll.h>
 #include <sys/socket.h>
 
+#include "config.h"
 #include "client.h"
 #include "server.h"
 #include "command.h"

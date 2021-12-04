@@ -7,8 +7,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include "config.h"
 #include "client.h"
-
 
 void libserver_client_array_append(struct LibserverClientArray *array, struct pollfd value) {
     if(array->logical_size == array->physical_size) {

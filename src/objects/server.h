@@ -5,20 +5,9 @@
 #include <pthread.h>
 
 #include "client.h"
+#include "config.h"
 #include "command.h"
 #include "../libsocket/libsocket.h"
-
-#define LIB_SERVER_READ_BUFFER      4096 + 1
-#define LIB_SERVER_SOCKET_QUEUE     10 + 1
-#define LIB_SERVER_POLL_TIMEOUT     500 + 1
-#define LIB_SERVER_COMMAND_BUFFER   248 + 1
-#define LIB_SERVER_MAXIMUM_CLIENTS  128 + 1
-#define LIB_SERVER_RESPONSE_BUFFER  4096 + 1
-#define LIB_SERVER_MAXIMUM_COMMANDS 64 + 1
-
-#define LIB_SERVER_COMMAND_DELIMITER ' '
-
-#define LIB_SERVER_ENABLE_MUTEX 0
 
 /*
  * The server structure. Contains an array of connected clients,

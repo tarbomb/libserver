@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "config.h"
 #include "command.h"
 
 struct LibserverCommand libserver_command_free(struct LibserverCommand value) {

@@ -2,6 +2,10 @@
 #define LIB_SERVER_COMMAND_H
 
 struct LibserverServer;
+
+/*
+ * Represents a callback for a socket command.
+*/
 typedef void (*LibseverCallback)(struct LibserverServer *server, int descriptor, const char *arguments);
 
 /*

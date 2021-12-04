@@ -15,6 +15,9 @@ struct LibsocketSocket {
     struct sockaddr_in address;
 };
 
+/*
+ * Represents a callback for when a connection is accepted.
+*/
 typedef void (*LibsocketAcceptCallback)(struct LibsocketSocket *socket_container, int connector);
 
 /*
