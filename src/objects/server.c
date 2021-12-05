@@ -196,3 +196,7 @@ unsigned int libserver_server_flush(struct LibserverServer *server) {
 
     return flushed;
 }
+
+int libserver_server_accept(struct LibserverServer *server, int timeout, LibsocketAcceptCallback on_accept) {
+    return libsocket_socket_accept(&server->socket, timeout, on_accept);
+}

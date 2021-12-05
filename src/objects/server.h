@@ -158,4 +158,16 @@ size_t libserver_server_respond(int descriptor, const char *format, ...);
 */
 unsigned int libserver_server_flush(struct LibserverServer *server);
 
+/*
+ * Attempts to accept any new clients that are trying to connect to
+ * the server, with a callback being invoked if there is a successful
+ * connection.
+ *
+ * @param server: the server to accept clients for
+ * @param timeout: the timeout to wait for accepting
+ * @param on_accept: the callback to invoke on a successful connection
+ * @return: the file descriptor associated with the new client, or -1 if there was none
+*/
+int libserver_server_accept(struct LibserverServer *server, int timeout, LibsocketAcceptCallback on_accept);
+
 #endif
