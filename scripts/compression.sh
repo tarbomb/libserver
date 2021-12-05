@@ -75,7 +75,7 @@ cat "$ROOT/$LIBRARY_NAME/processed_$LIBRARY_NAME.h" | pcregrep -M "$RE_TYPEDEF" 
 cat "$ROOT/$LIBRARY_NAME/processed_$LIBRARY_NAME.h" | pcregrep -M "$RE_STRUCTURE" >> "$ROOT/$LIBRARY_NAME/$LIBRARY_NAME.h"
 
 # Extract all used function signatures into the final header
-for function_name in `cat "$ROOT/$LIBRARY_NAME/$LIBRARY_NAME.c" | grep -v '^#' | sed 's/{.*}//g' | awk -F'(' '{ print $1 }'| rev | awk '{ print $1 }' | rev`; do
+for function_name in `cat "$ROOT/$LIBRARY_NAME/$LIBRARY_NAME.c" | grep -v '^#' | sed 's/\*/ /g' |sed 's/{.*}//g' | awk -F'(' '{ print $1 }'| rev | awk '{ print $1 }' | rev`; do
     cat "$ROOT/$LIBRARY_NAME/config.h" "$ROOT/$LIBRARY_NAME/processed_$LIBRARY_NAME.h" | grep -v '^#include' | cpp -C -nostdinc | pcregrep -M "$RE_MULTILINE_COMMENT\n.+$function_name\(" >> "$ROOT/$LIBRARY_NAME/$LIBRARY_NAME.h"
 done
 
