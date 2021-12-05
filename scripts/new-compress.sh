@@ -168,4 +168,7 @@ compressor_process_header "$ROOT/$LIBRARY_NAME/unprocessed_$LIBRARY_NAME.h" >> "
 compressor_get_forward_declarations "$SRC_DIRECTORY" >> "$ROOT/$LIBRARY_NAME/$LIBRARY_NAME.h"
 compressor_get_typedefs "$ROOT/$LIBRARY_NAME/processed_$LIBRARY_NAME.h" >> "$ROOT/$LIBRARY_NAME/$LIBRARY_NAME.h"
 compressor_get_structures "$ROOT/$LIBRARY_NAME/processed_$LIBRARY_NAME.h" >> "$ROOT/$LIBRARY_NAME/$LIBRARY_NAME.h"
-compressor_get_signatures "$ROOT/$LIBRARY_NAME/libserver.c" "$ROOT/$LIBRARY_NAME/processed_$LIBRARY_NAME.h" >> "$ROOT/$LIBRARY_NAME/$LIBRARY_NAME.h"
+compressor_get_signatures "$ROOT/$LIBRARY_NAME/$LIBRARY_NAME.c" "$ROOT/$LIBRARY_NAME/processed_$LIBRARY_NAME.h" >> "$ROOT/$LIBRARY_NAME/$LIBRARY_NAME.h"
+
+mv "$ROOT/$LIBRARY_NAME/$LIBRARY_NAME.h" '.'
+mv "$ROOT/$LIBRARY_NAME/$LIBRARY_NAME.c" '.'
