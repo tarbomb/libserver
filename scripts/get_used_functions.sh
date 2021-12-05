@@ -19,6 +19,10 @@ PROCESSED_TEMP_PROJECT_FILE="/tmp/processed_get_used_functions_project.tmp"
 
 CSOURCE="/home/$USER/core/bin/bin/csource"
 
+# Functions that should have themselves and their dependants added
+# regardless of whether or not they are used.
+EXCEPTIONS="libsocket_socket_set_data"
+
 rm -rf "$TEMP_FILE"
 rm -rf "$TEMP_PROJECT_FILE"
 rm -rf "$PROCESSED_TEMP_FILE"
@@ -54,15 +58,20 @@ for function_name in `cat "$PROCESSED_TEMP_PROJECT_FILE" | awk -F'(' '{ print $1
     cat "$PROCESSED_TEMP_FILE" | $CSOURCE extract-functions | $CSOURCE dependencies "$function_name" >> "$TEMP_DEPENDENCIES_FILE"
 done
 
+# Find dependencies of each function exception.
+for function_name in "$EXCEPTIONS"; do
+    cat "$PROCESSED_TEMP_FILE" | $CSOURCE extract-functions | $CSOURCE dependencies "$function_name" >> "$TEMP_DEPENDENCIES_FILE"
+done
+
 # Output the source code of each dependency
 for function_name in `cat "$TEMP_DEPENDENCIES_FILE" | awk '{ print length " " $0 }' | sort -n | uniq | cut -d' ' -f 2-`; do
     cat "$PROCESSED_TEMP_FILE" | grep "^[A-Za-z_].* $function_name"
 done
 
 # Cleanup 
-rm -rf "$TEMP_FILE"
-rm -rf "$TEMP_PROJECT_FILE"
-rm -rf "$PROCESSED_TEMP_FILE"
-rm -rf "$CONFIG_TEMP_FILE"
-rm -rf "$TEMP_DEPENDENCIES_FILE"
-rm -rf "$PROCESSED_TEMP_PROJECT_FILE"
+#rm -rf "$TEMP_FILE"
+#rm -rf "$TEMP_PROJECT_FILE"
+#rm -rf "$PROCESSED_TEMP_FILE"
+#rm -rf "$CONFIG_TEMP_FILE"
+#rm -rf "$TEMP_DEPENDENCIES_FILE"
+#rm -rf "$PROCESSED_TEMP_PROJECT_FILE"
