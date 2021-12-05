@@ -94,8 +94,7 @@ void libserver_server_init_clients(struct LibserverServer *server, size_t length
  * @param callback: the function to invoke
  * @return: a copy of the command
 */
-struct LibserverCommand
-libserver_server_add_command(struct LibserverServer *server, const char *name, LibseverCallback callback);
+struct LibserverCommand libserver_server_add_command(struct LibserverServer *server, const char *name, LibseverCallback callback);
 
 /*
  * Adds a new client to a server's array of clients.
