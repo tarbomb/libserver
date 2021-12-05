@@ -6,6 +6,8 @@
 
 #define LIB_SOCKET_EXIT_FAILIURE EXIT_FAILURE
 
+struct LibsocketSocket;
+
 /*
  * A container for a socket and socket address
 */
