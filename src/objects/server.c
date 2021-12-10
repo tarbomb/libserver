@@ -106,8 +106,8 @@ size_t libserver_server_extract_command(const char *command, size_t length, char
 }
 
 int libserver_server_dispatch(struct LibserverServer *server, int sender, const char *message, const char *command) {
-    struct LibserverCommand target = {0};
     int index = -1;
+    struct LibserverCommand target = {0};
 
     target.command = command;
     index = libserver_command_array_find(&server->commands, target);
