@@ -31,6 +31,7 @@ typedef void (*LibsocketAcceptCallback)(struct LibsocketSocket *socket_container
 */
 struct LibsocketSocket libsocket_socket_init(int port);
 
+#ifndef LIB_SOCKET_NO_SERVER
 /*
  * Initializes a socket as a server socket that listens for a QUEUE
  * number of connects to queue up before revoking them.
@@ -39,22 +40,6 @@ struct LibsocketSocket libsocket_socket_init(int port);
  * @param queue: the number of connections to queue up before blocking.
 */
 void libsocket_socket_bind(struct LibsocketSocket *socket_container, int queue);
-
-/*
- * Connects a socket to a specific address with the port bound to a socket.
- *
- * @param socket_container: the socket to connect
- * @param address: the address to connect to
-*/
-void libsocket_socket_connect(struct LibsocketSocket *socket_container, const char *address);
-
-/*
- * Assign arbitrary data to the socket.
- *
- * @param socket_container: the socket to attach the data to
- * @param metadata: the data to attach
-*/
-void libsocket_socket_set_data(struct LibsocketSocket *socket_container, void *metadata);
 
 /*
  * Polls a socket for any incoming connections, and invokes the accept
@@ -66,6 +51,25 @@ void libsocket_socket_set_data(struct LibsocketSocket *socket_container, void *m
  * @return: the descriptor of the new connection, or -1 if there was none
 */
 int libsocket_socket_accept(struct LibsocketSocket *socket_container, int timeout, LibsocketAcceptCallback callback);
+#endif
+
+#ifndef LIB_SOCKET_NO_CLIENT
+/*
+ * Connects a socket to a specific address with the port bound to a socket.
+ *
+ * @param socket_container: the socket to connect
+ * @param address: the address to connect to
+*/
+void libsocket_socket_connect(struct LibsocketSocket *socket_container, const char *address);
+#endif
+
+/*
+ * Assign arbitrary data to the socket.
+ *
+ * @param socket_container: the socket to attach the data to
+ * @param metadata: the data to attach
+*/
+void libsocket_socket_set_data(struct LibsocketSocket *socket_container, void *metadata);
 
 /*
  * Polls the socket file descriptor, and dertermines if
