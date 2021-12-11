@@ -6,6 +6,14 @@
 
 #define LIB_SOCKET_EXIT_FAILIURE EXIT_FAILURE
 
+#ifndef LIB_SOCKET_NO_SERVER
+#define LIB_SOCKET_NO_SERVER 0
+#endif
+
+#ifndef LIB_SOCKET_NO_CLIENT
+#define LIB_SOCKET_NO_CLIENT 0
+#endif
+
 struct LibsocketSocket;
 
 /*
@@ -31,7 +39,7 @@ typedef void (*LibsocketAcceptCallback)(struct LibsocketSocket *socket_container
 */
 struct LibsocketSocket libsocket_socket_init(int port);
 
-#ifndef LIB_SOCKET_NO_SERVER
+#if LIB_SOCKET_NO_SERVER == 0
 /*
  * Initializes a socket as a server socket that listens for a QUEUE
  * number of connects to queue up before revoking them.
@@ -53,7 +61,7 @@ void libsocket_socket_bind(struct LibsocketSocket *socket_container, int queue);
 int libsocket_socket_accept(struct LibsocketSocket *socket_container, int timeout, LibsocketAcceptCallback callback);
 #endif
 
-#ifndef LIB_SOCKET_NO_CLIENT
+#if LIB_SOCKET_NO_CLIENT == 0
 /*
  * Connects a socket to a specific address with the port bound to a socket.
  *

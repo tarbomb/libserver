@@ -29,6 +29,7 @@ struct LibsocketSocket libsocket_socket_init(int port) {
     return new_socket;
 }
 
+#if LIB_SOCKET_NO_SERVER == 0
 void libsocket_socket_bind(struct LibsocketSocket *socket_container, int queue) {
     socket_container->address.sin_addr.s_addr = htonl(INADDR_ANY);
 
@@ -39,22 +40,6 @@ void libsocket_socket_bind(struct LibsocketSocket *socket_container, int queue) 
     }
 
     listen(socket_container->fd, queue);
-}
-
-void libsocket_socket_connect(struct LibsocketSocket *socket_container, const char *address) {
-    int status = 0;
-
-    if(inet_pton(AF_INET, address, &socket_container->address.sin_addr) <= 0) {
-        fprintf(stderr, "libsocket_socket_connect: failed to generate address '%s' (%s)\n", address, strerror(errno));
-        exit(LIB_SOCKET_EXIT_FAILIURE);
-    }
-
-    status = connect(socket_container->fd, (struct sockaddr *) &socket_container->address, sizeof(socket_container->address));
-
-    if(status < 0) {
-        fprintf(stderr, "libsocket_socket_connect: failed to connect to address '%s' (%s)\n", address, strerror(errno));
-        exit(LIB_SOCKET_EXIT_FAILIURE);
-    }
 }
 
 int libsocket_socket_accept(struct LibsocketSocket *socket_container, int timeout, LibsocketAcceptCallback callback) {
@@ -84,6 +69,25 @@ int libsocket_socket_accept(struct LibsocketSocket *socket_container, int timeou
 
     return connection_fd;
 }
+#endif
+
+#if LIB_SOCKET_NO_CLIENT == 0
+void libsocket_socket_connect(struct LibsocketSocket *socket_container, const char *address) {
+    int status = 0;
+
+    if(inet_pton(AF_INET, address, &socket_container->address.sin_addr) <= 0) {
+        fprintf(stderr, "libsocket_socket_connect: failed to generate address '%s' (%s)\n", address, strerror(errno));
+        exit(LIB_SOCKET_EXIT_FAILIURE);
+    }
+
+    status = connect(socket_container->fd, (struct sockaddr *) &socket_container->address, sizeof(socket_container->address));
+
+    if(status < 0) {
+        fprintf(stderr, "libsocket_socket_connect: failed to connect to address '%s' (%s)\n", address, strerror(errno));
+        exit(LIB_SOCKET_EXIT_FAILIURE);
+    }
+}
+#endif
 
 int libsocket_socket_has_input(int descriptor, int timeout) {
     struct pollfd target = {0};

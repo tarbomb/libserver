@@ -59,7 +59,7 @@ for function_name in `cat "$PROCESSED_TEMP_PROJECT_FILE" | awk -F'(' '{ print $1
 done
 
 # Find dependencies of each function exception.
-for function_name in "$EXCEPTIONS"; do
+for function_name in $EXCEPTIONS; do
     cat "$PROCESSED_TEMP_FILE" | $CSOURCE extract-functions | $CSOURCE dependencies "$function_name" >> "$TEMP_DEPENDENCIES_FILE"
 done
 
